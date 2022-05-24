@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>FIANZA LTDA</title>
+        <link rel="shortcut icon" href="favicon.ico.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link href="public/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+        <link href="public/css/login.css" rel='stylesheet' type='text/css' />
+        <link href="public/css/font-awesome.min.css" rel='stylesheet' type='text/css' />
+        
+        
+        <script src="https://www.google.com/recaptcha/api.js?render=reCAPTCHA_site_key&hl=es"></script>
+    </head> 
+    <body>
+        <div class="fullscreen-bg">
+            <video autoplay="" loop="" muted="" poster="public/images/PreVideo.jpg" class="fullscreen-bg__video">
+                <source src="public/videos/FIANZA.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="container col-md-4 col-md-offset-8">
+            <div class="card">
+                <div class="card-body" style="color: #fff;">
+                    <div class="card-img" style="text-align: center; padding-top: 40px; padding-bottom: 40px; margin: 10px;">
+                        <img src="public/images/logo_fianza-01.png" style="width: 50%; height: auto;">
+                    </div>
+                    <form action="Login.php" method="POST" style="margin: 10%;">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">USUARIO</label>
+                            <input class="form-control" name="usuario" type="text"  placeholder="Usuario">
+                        </div>
+                        <div class="form-group" style="padding-bottom: 20px;">
+                            <label for="exampleInputEmail1">PASSWORD</label>
+                            <input class="form-control" type="password" name="password" placeholder="Password">
+                        </div>
+                        <!--                        <a class="btn btn-success btn-block" href="index.html">
+                                                    INGRESAR  <i class="fas fa-headphones"></i>
+                                                </a>-->
+                        <div class="form-group" style="padding-bottom: 20px;">
+                            <div class="g-recaptcha" data-sitekey="6Lfr2K8UAAAAAEERDtjDExD0tE_-I0JoHWt6IvAx"></div>
+                        </div>
+                        <input class="btn btn-success btn-block" type="submit" value="INGRESAR">
+                    </form>
+                    <div class="text-center">
+                        <a class="d-block small" href="#" style="color: #fff;"><i class="fa fa-warning"></i>  Recuerda cambiar tu contraseña con frecuencia</a>
+                    </div>
+                    <div class="text-center">
+                        <a class="d-block small" href="#" style="color: #fff;"><p>CONTACNET  © <?php echo date('Y'); ?> FIANZA LTDA</p></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

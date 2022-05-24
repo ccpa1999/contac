@@ -1,0 +1,2 @@
+SELECT COUNT(cedula_deudor) as clientes FROM historico_gestion WHERE gestor = 'lvanegas' AND fecha_gestion BETWEEN '2017-06-14 00:00:00'
+                AND '2017-06-14 23:59:59' GROUP BY cedula_deudor

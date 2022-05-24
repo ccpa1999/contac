@@ -1,0 +1,2 @@
+SELECT m.motivo, m.id FROM motivos_no_pago m, arbol_motivos_no_pago a WHERE a.id_contacto = '93' AND a.id_motivo_no_pago = m.id 
+                AND a.id_cliente = '13'

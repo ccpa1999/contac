@@ -1,0 +1,1 @@
+UPDATE arbol_contacto SET estado = 0 WHERE id_accion = '5' AND id_cliente =  '4'

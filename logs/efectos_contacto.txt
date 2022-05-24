@@ -1,0 +1,2 @@
+SELECT e.homologado, e.id FROM homologado_efecto e, arbol_efecto a WHERE a.id_contacto = '38' AND a.id_efecto = e.id 
+                AND a.id_cliente = '2'

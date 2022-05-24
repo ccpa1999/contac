@@ -1,0 +1,449 @@
+Array
+(
+    [cartera] => Array
+        (
+            [0] => Array
+                (
+                    [id_cliente] => 4
+                    [nombre_cliente] => Claro Fijo
+                    [controlador] => carterasController.php
+                    [ruta_logo] => /logos_clientes/Claro-logo-logotype-1024x768.png
+                    [estado] => 1
+                )
+
+        )
+
+    [cliente] => Array
+        (
+            [cliente] => Array
+                (
+                    [0] => Array
+                        (
+                            [id_deudor] => 263134
+                            [nombre] => EDGAR MANU BUITRAGO RODRIGUEZ
+                            [cedula] => 19495556
+                            [estado] => 1
+                            [bloqueo_gestion] => 0
+                        )
+
+                )
+
+            [obligaciones] => Array
+                (
+                    [0] => Array
+                        (
+                            [id_obligacion] => 265572
+                            [producto] => VOZ@TV
+                            [cedula_deudor] => 19495556
+                            [cartera] => 4
+                            [numero_obligacion] => 93175511
+                            [entidad] => 
+                            [regional] => BOGOTA
+                            [estrategia_inicial] => 
+                            [estrategia_actual] => 
+                            [obligaciones] => 
+                            [ultimo_efecto] => MENSAJE VIRTUAL
+                            [valor_actual_inicial] => 
+                            [valor_maximo] => 
+                            [fecha_apertura] => 14/05/2017
+                            [plazo] => 
+                            [dia_facturacion] => 
+                            [modalidad] => 
+                            [franja_actual] => 
+                            [estado_reparto] => Masivo Edad 0
+                            [user_id] => 
+                            [mono_multi] => 
+                            [nueva_marca_foco] => 
+                            [estapa_proceso_juridico] => 
+                            [codigo_garantia] => 
+                            [fecha_ultimo_alivio] => 
+                            [estado_ciclo] => 
+                            [estado_obligacion] =>  NO RECUPERADO 
+                            [codigo_recuperacion] => 
+                            [fecha_actualizacion_inicial] => 
+                            [fecha_actualizacion] => 
+                            [dias_mora_inicial] => 0
+                            [dias_mora_actual] => 0
+                            [fecha_pago] => 
+                            [saldo_capital_inicial] => 
+                            [saldo_capital] => 
+                            [interes_sobre_saldo] => 
+                            [saldo_total] => 
+                            [valor_cuota] => 
+                            [capital_mora] => 
+                            [intereses_mora] => 
+                            [cargo_cobranzas] => 
+                            [cantidad_disputada] => 
+                            [saldo_mora] => $ 106.586
+                            [pagos_mes_cliente] => 
+                            [pagos_por_obligacion] => 
+                            [fecha_ultimo_pago] => 
+                            [ciclo_mora_inicial_obligacion] => 
+                            [ciclo_mora_actual_sistema] => 
+                            [porcentaje_gac] => 
+                            [pago_fianza] => 
+                            [fecha_seguro] => 
+                            [valor_seguro] => 
+                            [valor_provisionado] => 
+                            [otros_cargos] => 
+                            [zona] => 4.2 BOGOTA CENTRO
+                            [saldo_expuesto] => 106586
+                            [fecha_vigencia_asignacion] => 2017-06-01
+                            [estado] => 1
+                        )
+
+                )
+
+            [direcciones] => Array
+                (
+                    [0] => Array
+                        (
+                            [id_direccion] => 262149
+                            [cedula_deudor] => 19495556
+                            [tipo_direccion] => 
+                            [ciudad] => BOGOTA
+                            [direccion] => CL 67 27A-32 201
+                            [estado] => 1
+                        )
+
+                )
+
+            [emails] => Array
+                (
+                    [0] => Array
+                        (
+                            [id_correo] => 114644
+                            [cedula_deudor] => 19495556
+                            [tipo_correo] => 
+                            [correo] => edgarmanuel21@gmail.com
+                            [estado] => 1
+                        )
+
+                )
+
+            [telefonos] => Array
+                (
+                    [0] => Array
+                        (
+                            [id_telefono] => 628462
+                            [cedula_deudor] => 19495556
+                            [tipo_telefono] => teléfono residencia
+                            [telefono] => 0
+                            [estado] => 1
+                        )
+
+                    [1] => Array
+                        (
+                            [id_telefono] => 643254
+                            [cedula_deudor] => 19495556
+                            [tipo_telefono] => celular oficina
+                            [telefono] => 14972049
+                            [estado] => 1
+                        )
+
+                    [2] => Array
+                        (
+                            [id_telefono] => 612619
+                            [cedula_deudor] => 19495556
+                            [tipo_telefono] => celular
+                            [telefono] => 3166284849
+                            [estado] => 1
+                        )
+
+                )
+
+        )
+
+    [gestion] => Array
+        (
+            [acciones] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 4
+                            [id_accion] => 8
+                            [homologado] => Hacer Llamada
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 5
+                            [id_accion] => 11
+                            [homologado] => recibir llamada
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                )
+
+            [contacto] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 4
+                            [id_contacto] => 2
+                            [homologado] => Mensaje de Voz
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 5
+                            [id_contacto] => 3
+                            [homologado] => Esposo(a)
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [2] => Array
+                        (
+                            [id] => 6
+                            [id_contacto] => 4
+                            [homologado] => Titular
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [3] => Array
+                        (
+                            [id] => 7
+                            [id_contacto] => 6
+                            [homologado] => Encargado
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [4] => Array
+                        (
+                            [id] => 8
+                            [id_contacto] => 7
+                            [homologado] => Familiar
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [5] => Array
+                        (
+                            [id] => 13
+                            [id_contacto] => 8
+                            [homologado] => NO CONOCEN DESTINATARIO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [6] => Array
+                        (
+                            [id] => 11
+                            [id_contacto] => 9
+                            [homologado] => NO CONTESTAN
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [7] => Array
+                        (
+                            [id] => 9
+                            [id_contacto] => 10
+                            [homologado] => Tercero
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [8] => Array
+                        (
+                            [id] => 16
+                            [id_contacto] => 11
+                            [homologado] => OTRO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                )
+
+            [motivo_no_pago] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 43
+                            [id_efecto] => 85
+                            [homologado] => COLGO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 44
+                            [id_efecto] => 86
+                            [homologado] => INSOLVENTE
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [2] => Array
+                        (
+                            [id] => 45
+                            [id_efecto] => 93
+                            [homologado] => MENSAJE DE VOZ
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [3] => Array
+                        (
+                            [id] => 46
+                            [id_efecto] => 94
+                            [homologado] => NO CONTESTAN
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [4] => Array
+                        (
+                            [id] => 47
+                            [id_efecto] => 133
+                            [homologado] => YA PAGO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [5] => Array
+                        (
+                            [id] => 48
+                            [id_efecto] => 120
+                            [homologado] => RENUENTE
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [6] => Array
+                        (
+                            [id] => 49
+                            [id_efecto] => 117
+                            [homologado] => RECORDATORIO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [7] => Array
+                        (
+                            [id] => 50
+                            [id_efecto] => 114
+                            [homologado] => RECLAMACION
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [8] => Array
+                        (
+                            [id] => 51
+                            [id_efecto] => 91
+                            [homologado] => ILOCALIZADO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [9] => Array
+                        (
+                            [id] => 52
+                            [id_efecto] => 95
+                            [homologado] => NO RECIBIDA
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [10] => Array
+                        (
+                            [id] => 53
+                            [id_efecto] => 106
+                            [homologado] => POSIBLE NEGOCIACION
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [11] => Array
+                        (
+                            [id] => 54
+                            [id_efecto] => 108
+                            [homologado] => PROMESA
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [12] => Array
+                        (
+                            [id] => 55
+                            [id_efecto] => 98
+                            [homologado] => OCUPADO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [13] => Array
+                        (
+                            [id] => 56
+                            [id_efecto] => 97
+                            [homologado] => NO CONOCEN DESTINATARIO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [14] => Array
+                        (
+                            [id] => 57
+                            [id_efecto] => 99
+                            [homologado] => PROMESA ROTA
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [15] => Array
+                        (
+                            [id] => 58
+                            [id_efecto] => 99
+                            [homologado] => SE HABLO CON TERCERO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [16] => Array
+                        (
+                            [id] => 59
+                            [id_efecto] => 91
+                            [homologado] => NO CONOCEN DESTINATARIO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                )
+
+        )
+
+    [historial] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 31542
+                    [fecha_gestion] => 2017-05-23 07:18:05
+                    [gestor] => iordonez
+                    [cedula_deudor] => 19495556
+                    [obligacion] => 93175511
+                    [fecha_seguimiento] => 
+                    [valor_acuerdo] => 106.586 	
+                    [fecha_acuerdo] => 2017/05/26
+                    [motivo_no_pago] => 
+                    [telefono] => 3166284849
+                    [tipo_negociacion] => 
+                    [actividad_economica] => 
+                    [observaciones] => 3166284849Contesta titular, indica realizar el pago el dia 26 de mayo por el valor de $106.586 	
+                    [accion] => Hacer Llamada
+                    [efecto] => PROMESA
+                    [contacto] => Titular
+                )
+
+        )
+
+)

@@ -1,0 +1,1 @@
+SELECT cedula as cedula_deudor FROM deudores WHERE cedula = '80817151'

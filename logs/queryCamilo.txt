@@ -1,0 +1,2 @@
+INSERT INTO historico_gestion (fecha_gestion, gestor, cedula_deudor, obligacion, accion, efecto, contacto, motivo_no_pago, actividad_economica, fecha_seguimiento, valor_acuerdo, fecha_acuerdo, telefono, tipo_negociacion, observaciones, origen_gestion, cliente_id) VALUES (NOW(), 'cmartinez', 'C79541622', '', '50', '279', '67', '', '','', '', '', '3662509', '', '3662509 TT NO CONTESTA. / ', 'general', 
+                    '2')

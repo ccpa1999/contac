@@ -1,0 +1,1 @@
+UPDATE arbol_efecto SET estado = 0 WHERE id_contacto = '16' AND id_cliente =  '4'

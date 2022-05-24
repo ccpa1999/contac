@@ -1,0 +1,1 @@
+SELECT c.homologado, c.id FROM homologado_contacto c, arbol_contacto a WHERE a.id_accion = '21' AND a.id_contacto = c.id
