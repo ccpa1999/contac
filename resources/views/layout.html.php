@@ -1,0 +1,431 @@
+<!DOCTYPE HTML>
+
+<head>
+    <title>FIANZA LTDA</title>
+    <link rel="shortcut icon" href="../../favicon.ico.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="Easy Admin Panel Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+          Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+    <script type="application/x-javascript">
+        addEventListener("load", function() {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+
+    <link href="../../public/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+    <link href="../../public/css/bootstrap-datepicker.min.css" rel='stylesheet' type='text/css' />
+    <link href="../../public/css/jquery-confirm.css" rel='stylesheet' type='text/css' />
+    <link href="../../public/css/datatables.min.css" rel='stylesheet' type='text/css' />
+    <link href="../../public/css/style.css" rel='stylesheet' type='text/css' />
+    <link href="../../public/css/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../../public/jquery-ui-1.11.4/jquery-ui.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../public/css/icon-font.min.css" type='text/css' />
+    <link href="../../public/css/animate.css" rel="stylesheet" type="text/css" media="all">
+    <link href="../../public/css/fileinput.css" rel="stylesheet" type="text/css" media="all">
+    <link href="../../vendor/datetimepicker/jquery.datetimepicker.css" rel="stylesheet" type="text/css" media="all">
+    <link href="../../public/librerias/jquery-toggles-master/css/toggles-full.css" rel="stylesheet" type="text/css" media="all">
+    <link href="../../public/css/capacitacionStyle.css" rel="stylesheet" type="text/css" />
+    <!-- bootstrap select -->
+    <!-- CAPACITACION -->
+    <link rel="stylesheet" href="../../public/css/bootstrap-select.min.css">
+    <!-- Fin de CAPACITACION -->
+    <style>
+        .popover {
+            width: 80%;
+            max-width: 80%;
+        }
+
+        .popover-inner {
+            width: 1000px;
+        }
+
+        .popover-content {
+            width: 1000px;
+        }
+
+        .dropdown-menu #menu-gestionar {
+            width: 100%;
+            min-width: 100%;
+            text-align: center;
+        }
+    </style>
+
+    <!--<link href='//fonts.googleapis.com/css?family=Cabin:400,400italic,500,500italic,600,600italic,700,700italic' rel='stylesheet' type='text/css'>-->
+</head>
+<?php
+//session_start();
+if (isset($_SESSION['usuario'])) :
+?>
+<audio id="chatAudio"><source src="notify.ogg" type="audio/ogg"><source src="../../public/sonido/notify.mp3" type="audio/mpeg"><source src="notify.wav" type="audio/wav"></audio>
+
+    <body class="sticky-header left-side-collapsed">
+        <section>
+            <div class="left-side sticky-left-side">
+                <div class="logo">
+                    <h1><a href="#">
+                            <img src="../../public/images/logo_fianza-01 banner.png" class="img-responsive">
+                        </a></h1>
+                </div>
+                <div class="logo-icon text-center">
+                    <a href="#"><i class="glyphicon glyphicon-home"></i> </a>
+                </div>
+                <div class="left-side-inner">
+                    <?php $this->insert('menus.html', ['modulo' => $modulo, 'cartera' => (isset($carteraActual)) ? $carteraActual : '']); ?>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="header-section">
+                    <a class="toggle-btn  menu-collapsed"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                    <div class="menu-right">
+                        <div class="user-panel-top">
+                            <div class="profile_details_left">
+                                <ul class="nofitications-dropdown">
+                                    <li class="login_box" id="loginContainer">
+                                        <!-- search-scripts -->
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-bell"></i>
+                                            <span class="badge blue1 badge-danger" id="spanCantidadNotificaciones" style="display:none;">
+                                                <div id="badgeCantidadNotificaciones"></div>
+                                            </span>
+                                        </a>
+                                        <ul class="dropdown-menu" style="width: 300px;">
+                                            <li>
+                                                <div class="notification_header">
+                                                    <h3>Notificaciones</h3>
+                                                </div>
+                                            </li>
+                                            <div id="resultadoAlarmas">
+
+                                            </div>
+                                            <div class="notification_bottom">
+                                                <a href="#">Ver todas las notificaciones</a>
+                                            </div>
+                                    </li>
+                                </ul>
+                                </li>
+                                <?php if ($modulo == 'cartera') : ?>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-tasks"></i>
+                                            <span class="badge blue1 badge-danger" id="spanCantidadTareas" style="display:none;">
+                                                <div id="badgeCantidadTareas"></div>
+                                            </span>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <div class="notification_header">
+                                                    <h3>Tareas</h3>
+                                                </div>
+                                            </li>
+                                            <div id="divListadoTareas">
+                                            </div>
+                                            <li>
+                                                <div class="notification_bottom">
+                                                    <a href="#">Ver todas las tareas</a>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" id="launchPhone" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-phone"></i>
+                                            <span class="badge blue1 badge-danger" id="spanCantidadTareas" style="display:none;">
+                                                <div id="badgeCantidadTareas"></div>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" title="Mi Productividad" id="accionMiProductividad" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-pie-chart"></i>
+                                            <span class="badge blue1 badge-danger" id="spanProductividadAsesor" style="display:none;">
+                                                <div id="badgeCantidadTareas"></div>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-hourglass"></i>
+                                            <span class="badge blue1"></span>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <div href="#" class="notification_header">
+                                                    <h3>Pausas</h3>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="notification_desc pausa" data-pausa="almuerzo" data-label="Almuerzo">
+                                                    <strong>Almuerzo</strong>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="notification_desc pausa" data-pausa="agua" data-label="Agua">
+                                                    <strong>Agua</strong>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="notification_desc pausa" data-pausa="auditoria_formacion" data-label="Auditoría Formación">
+                                                    <strong>Auditoría Formación</strong>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="notification_desc pausa" data-pausa="bano" data-label="Baño">
+                                                    <strong>Baño</strong>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="notification_desc pausa" data-pausa="break" data-label="Break">
+                                                    <strong>Break</strong>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="notification_desc pausa" data-pausa="pausas_activas" data-label="Pausas Activas">
+                                                    <strong>Pausas Activas</strong>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="notification_desc pausa" data-pausa="reunion" data-label="Reunión">
+                                                    <strong>Reunión</strong>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="notification_desc pausa" data-pausa="tarea_especial" data-label="Tarea Especial">
+                                                    <strong>Tarea Especial</strong>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <div class="notification_bottom">
+                                                    <a href="#">Ver todas las pausas</a>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                <?php endif; ?>
+                                <?php if (isset($logoCarteraActual)) : ?>
+                                    <li><img src="../../public/images/<?php echo $logoCarteraActual; ?>" style="width: 100px; height: 30px;"></li>
+                                <?php endif; ?>
+                                </ul>
+                            </div>
+                            <div class="profile_details">
+                                <ul>
+                                    <li class="dropdown profile_details_drop">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <div class="profile_img">
+                                                <div class="user-name">
+                                                    <!--                                                    <p><?php
+                                                                                                                echo $_SESSION['nombre'];
+                                                                                                                $nombre = explode(' ', $_SESSION['nombre']);
+                                                                                                                $nombre = $nombre[0];
+                                                                                                                echo $nombre;
+                                                                                                                ?><span></span></p>-->
+                                                    <span></span>
+                                                </div>
+                                                <i class="fa fa-user-circle-o fa-3x"></i>
+                                                <!--<i class="fa fa-chevron-up"></i>-->
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </a>
+                                        <ul class="dropdown-menu drp-mnu">
+                                            <li> <a href="#" id="accionPerfil" data-usuario="<?php echo $_SESSION['usuario'] ?>"><i class="fa fa-user"></i>Perfil</a> </li>
+                                            <li> <a href="../../sesion.php"><i class="fa fa-sign-out"></i> Salir</a> </li>
+                                        </ul>
+                                    </li>
+                                    <div class="clearfix"> </div>
+                                </ul>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <?php if (isset($carteraActual)) : ?>
+                    <input type="hidden" id="carteraActual" value="<?php echo $carteraActual; ?>">
+                    <input type="hidden" id="rolActual" value="<?php echo $_SESSION['rol_actual']; ?>">
+                <?php endif; ?>
+                <input type="hidden" id="estadoPausa" value="0">
+                <div id="divLogoCartera" style="position: absolute; bottom: 10%; right: 3%; z-index: 1000">
+                </div>
+                <div id="divCargando" class="success" style="display: none; position: absolute; bottom: 50%; right: 50%; z-index: 1000">
+                    <i class="fa fa-spinner fa-spin fa-lg fa-4x fa-fw"></i>
+                </div>
+                <div class="alert alert-success alert-dismissible" role="alert" id="alertSuccess" style="display: none; position: absolute; bottom: 70%; right: 3%;
+                     font-size: 18px; width: 300px; height: 100px; z-index: 1000; text-align: center;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <p><i class="fa fa-check fa-2x"></i></p> <strong>Operación Completada.</strong>
+                </div>
+                <div class="alert alert-danger alert-dismissible" role="alert" id="alertDanger" style="display: none; position: absolute; bottom: 50px; right: 16px;
+                     font-size: 18px; width: 300px; height: 120px; z-index: 1000; text-align: center;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <p><i class="fa fa-times-circle fa-2x"></i></p> <strong>La operación no se ha podido completar.</strong>
+                </div>
+                <div class="alert alert-warning alert-dismissible" role="alert" id="alertWarning" style="display: none; position: absolute; bottom: 50px; right: 16px;
+                     font-size: 18px; width: 300px; height: 150px; z-index: 1000; text-align: center;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <p><i class="fa fa-warning fa-2x"></i></p> <strong>El registro que está tratando de ingresar ya existe.</strong>
+                </div>
+                <div id="page-wrapper">
+
+                    <?= $this->section('content'); ?>
+                    <div class="modal fade" id="editarRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Editar</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div id="editarRegistroContent" class="col-md-10 col-md-offset-2">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-primary" id="accionGuardarEditar">Aplicar Cambios</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer>
+                <p><?php echo date('Y'); ?> FIANZA LTDA | Todos los derechos reservados</p>
+            </footer>
+        </section>
+        <div id="modals">
+            <div class="modal fade" id="modal_clientes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        ...
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="modal_clientes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        ...
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="modal_clientes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        ...
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../public/js/wow.min.js"></script>
+        <script>
+            new WOW().init();
+        </script>
+        <!--<script src="../../public/js/jquery-1.10.2.min.js"></script>-->
+        <script src="../../public/js/jquery-3.1.1.min.js"></script>
+        <script src="../../public/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+        <script src="../../public/js/jquery.nicescroll.js"></script>
+        <script src="../../public/js/Chart.js"></script>
+        <script src="../../public/js/datatables.min.js"></script>
+        <script src="../../public/js/scripts.js"></script>
+        <script src="../../public/js/scriptsCapacitacion.js"></script>
+        <script src="../../public/js/bootstrap.min.js"></script>
+        <script src="../../public/js/bootstrap-datepicker.min.js"></script>
+        <script src="../../public/js/parsley.min.js"></script>
+        <script src="../../public/js/fileinput.js"></script>
+        <script src="../../public/js/locales/es.js"></script>
+        <script src="../../vendor/datetimepicker/build/jquery.datetimepicker.full.js"></script>
+        <script src="../../public/js/jquery-confirm.js"></script>
+        <script src="../../public/librerias/clipboard.js-master/dist/clipboard.min.js"></script>
+        <script src="../../public/librerias/jquery-toggles-master/js/Toggles.js"></script>
+        <script src="../../public/js/jquery.countdown.min.js"></script>
+        <script src="../../public/js/timer.jquery.min.js"></script>
+        <script src="../../public/js/idle-timer.min.js"></script>
+        <!-- bootstrap select CAPACITACION-->
+        <script src="../../public/js/bootstrap-select.min.js"></script>
+    </body>
+    <?php if ($_SESSION['estado_pausa'] == 1 && ($_SESSION['rol_actual'] != 1 && $_SESSION['rol_actual'] != 2)) : ?>
+        <script>
+            iniciarPausa(<?php echo $_SESSION['tiempo_pausa']; ?>, '<?php echo (isset($_SESSION['tipo_pausa'])) ? $_SESSION['tipo_pausa'] : ''; ?>', '<?php echo (isset($_SESSION['label_pausa'])) ? $_SESSION['label_pausa'] : ''; ?>');
+        </script>
+
+    <?php endif; ?>
+    <?php
+    if ($_SESSION['cumpleanios'] == 1) :
+    ?>
+        <script>
+            mensaje('dark', '¡FELICIDADES!', 'green', '<div class="row">\n\
+                <div class="col-xs-4" style="align-items:center;">\n\
+                    <center>\n\
+                        <img src="../../public/images/pastel_opcional.png" style="padding-top:50%;" class="img-responsive"/>\n\
+                    </center>\n\
+                </div>\n\
+                <div class="col-xs-8">\n\
+                    <p class="text-muted text-justify">\n\
+                        Somos una de las compañías líderes en nuestro campo y \n\
+                        esto sería posible sin la ayuda de colaboradores como <strong>TU</strong>, \n\
+                        gracias por tu compromiso y apoyo.\n\
+                        Por eso en el día de tu cumpleaños te extendemos nuestros mejores deseos,\n\
+                        esperamos que tengas un día lleno de satisfacciones y sobre todo\n\
+                        cerca de aquellos a quienes amas.\n\
+                    </p>\n\
+                    <br/>\n\
+                    <br/>\n\
+                    <p class="text-center"><strong>FIANZA LTDA</strong></p>\n\
+                </div>\n\
+                </div>');
+        </script>
+    <?php endif; ?>
+    <?php
+    if ($_SESSION['cambio_password'] == 1) :
+    ?>
+        <script>
+            mensaje('dark', '¡OBLIGATORIO!', 'red', '<div class="row">\n\
+                <div class="col-xs-8">\n\
+                    <p class="text-muted">\n\
+                        Debes cambiar tu contraseña y volver a iniciar sesión.\n\
+                    </p>\n\
+                </div>\n\
+                </div>');
+        </script>
+    <?php endif; ?>
+    <?php if ($modulo == 'cartera' && !isset($cliente) && !isset($carteraActual)) :
+    ?><script>
+            $.alert({
+                icon: 'fa fa-comment-o',
+                title: '¡UPS!',
+                type: 'red',
+                theme: 'supervan',
+                animation: 'rotateYR',
+                content: 'Al parecer no existen clientes disponibles para gestionar, ponte en contacto con el lider de campaña',
+            });
+        </script>
+    <?php endif; ?>
+
+<?php else :
+?>
+    <link href="../../public/css/jquery-confirm.css" rel='stylesheet' type='text/css' />
+    <script src="../../public/js/jquery-3.1.1.min.js"></script>
+    <script src="../../public/js/jquery-confirm.js"></script>
+    <script>
+        $.confirm({
+            icon: 'fa fa-comment-o',
+            title: '¡ATENCIÓN!',
+            type: 'blue',
+            theme: 'dark',
+            animation: 'scaleX',
+            content: 'Su sesión ha finalizado',
+            buttons: {
+                Ok: function() {
+                    window.location.href = '../../index.php';
+                }
+            }
+        });
+    </script>
+<?php endif; ?>

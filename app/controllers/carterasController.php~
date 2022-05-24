@@ -1,0 +1,1067 @@
+<?php
+include_once '../../config/conect.php';
+include_once '../../vendor/autoload.php';
+include_once '../../app/clases/modeloCarteras.php';
+include_once '../../app/clases/modeloAdministracion.php';
+include_once '../../app/clases/modeloInformes.php';
+include_once '../../app/clases/modeloUsuarios.php';
+
+use League\Csv\Writer;
+
+$datos = (empty($_POST)) ? $_GET : $_POST;
+$carteras = new carterasController($datos);
+
+class carterasController {
+
+    var $claseCarteras;
+    var $claseAdministracion;
+    var $claseInformes;
+    var $claseUsuarios;
+    var $plantillas;
+    var $csv;
+
+    public function __construct($datos)
+    {
+        $this->plantillas = new League\Plates\Engine('../../resources/views');
+        $this->csv = Writer::createFromFileObject(new SplTempFileObject());
+        $this->claseCarteras = new modeloCarteras();
+        $this->claseAdministracion = new modeloAdministracion();
+        $this->claseInformes = new modeloInformes();
+
+        if (isset($_SESSION['usuario'])) {
+            $datos['metodo'] = (isset($datos['metodo'])) ? $datos['metodo'] : 'paginaInicio';
+            $metodo = $datos['metodo'];
+            $this->$metodo($datos);
+        } else {
+            header('Location: ../../sesion.php');
+        }
+    }
+
+    /**
+     * Función que construye el módulo de gestión de cada una de las carteras
+     * 
+     * @param array $datos contiene la información para el cargue de la cartera
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return string $plantilla imprime la plantilla con los datos cargados
+     */
+    public function paginaInicio($datos)
+    {
+        $data = $this->claseCarteras->controlador($datos);
+        $rol_actual = 0;
+        foreach ($_SESSION['acceso'] as $acceso) {
+            if ($acceso['id_cliente'] == $data['cartera'][0]['id_cliente']) {
+                $rol_actual = $acceso['id_rol'];
+                $_SESSION['rol_actual'] = $acceso['id_rol'];
+                $_SESSION['carteraActual'] = $datos['cartera'];
+                break;
+            }
+        }
+
+        $plantilla = $this->plantillas->render('carteras/moduloGestion.html', Array('cartera' => $data['cartera'],
+            'cliente' => $data['cliente'],
+            'gestion' => $data['gestion'],
+            'historial' => $data['historial'],
+            'carteraActual' => $datos['cartera']));
+        echo $plantilla;
+    }
+
+    /**
+     * Función que construye el módulo de gestión de acuerdo al criterio de busqueda
+     *
+     * @param Array $datos contiene el criterio y el tipo de dato para la busqueda
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function buscarDeudor($datos)
+    {
+        $data = $this->claseCarteras->controlador($datos);
+        $resultado = (!empty($data['cliente']['obligaciones'])) ? 'ok' : 'fallo';
+        if ($resultado == 'ok') {
+            $plantilla = $this->plantillas->render('resultadoBusquedas.html', Array('cartera' => $data['cartera'],
+                'cliente' => $data['cliente'],
+                'gestion' => $data['gestion'],
+                'historial' => $data['historial'],
+                'parametro' => 'busquedaDeudor',
+                'carteraActual' => $datos['cartera']));
+
+            $retorno = json_encode(Array('plantilla' => utf8_encode($plantilla),
+                'resultado' => $resultado));
+
+
+
+            echo $plantilla;
+        } else {
+            ?>  
+            <link href="../../public/css/jquery-confirm.css" rel='stylesheet' type='text/css' />
+            <script src="../../public/js/jquery-3.1.1.min.js"></script>
+            <script src="../../public/js/jquery-confirm.js "></script>
+            <script>
+                $.confirm({
+                    icon: 'fa fa-comment-o',
+                    title: '¡ATENCIÓN!',
+                    type: 'blue',
+                    theme: 'dark',
+                    animation: 'scaleX',
+                    content: 'El dato ingresado no coincide con ninún titular para esta campaña',
+                    buttons: {
+                        Ok: function () {
+                            window.close();
+                        }
+                    }
+                });
+            </script><?php
+        }
+    }
+
+    /**
+     * Función que construye el módulo de gestión de acuerdo al criterio de busqueda
+     * después de crear un registro para algún cliente
+     *
+     * @param Array $datos contiene el criterio y el tipo de dato para la busqueda
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function buscarDeudorRecarga($datos)
+    {
+        $data = $this->claseCarteras->controlador($datos);
+        $plantilla = $this->plantillas->render('resultadoBusquedas.html', Array('cartera' => $data['cartera'],
+            'cliente' => $data['cliente'],
+            'gestion' => $data['gestion'],
+            'historial' => $data['historial'],
+            'parametro' => 'busquedaDeudorRecarga',
+            'carteraActual' => $datos['cartera']));
+
+        $resultado = (!empty($data['cliente']['cliente'])) ? 'ok' : 'fallo';
+        $retorno = json_encode(Array('plantilla' => utf8_encode($plantilla),
+            'resultado' => $resultado));
+
+        echo $plantilla;
+    }
+
+    /**
+     * Función que construye el módulo de gestión de acuerdo al criterio de busqueda
+     *
+     * @param Array $datos contiene el criterio y el tipo de dato para la busqueda
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function buscarDeudoresTarea($datos)
+    {
+        $data = $this->claseCarteras->controlador($datos);
+
+        $plantilla = $this->plantillas->render('resultadoBusquedas.html', Array('cartera' => $data['cartera'],
+            'cliente' => $data['cliente'],
+            'gestion' => $data['gestion'],
+            'tarea' => $datos['tarea'],
+            'historial' => $data['historial'],
+            'parametro' => 'busquedaDeudorTarea',
+            'carteraActual' => $datos['cartera']));
+
+        $resultado = (isset($data['cliente']['cliente'])) ? 'ok' : 'fallo';
+        $retorno = json_encode(Array('plantilla' => utf8_encode(utf8_decode($plantilla)),
+            'resultado' => $resultado));
+
+        echo $retorno;
+    }
+
+    /**
+     * Función que obtiene formularios de ultilidades varias dependiendo el parametro
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function formulariosVarios($datos)
+    {
+        $plantilla = $this->plantillas->render('carteras/formulariosVarios.html', ['parametro' => $datos['parametro'], 'carteraActual' => $datos['cartera'], 'datos' => $datos]);
+        echo $plantilla;
+    }
+
+    /**
+     * Función que obtiene formularios de ultilidades varias dependiendo el parametro
+     *
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function formulariosSimuladores($datos)
+    {
+        $resultado = $this->claseCarteras->controlador($datos);
+	print_r($resultado);
+        //$plantilla = $this->plantillas->render('carteras/simuladores.html', ['parametro' => $datos['parametro'], 'carteraActual' => $datos['cartera'], 'datos' => $resultado]);
+        //echo $plantilla;
+    }
+
+    /**
+     * Esta function crea un nuevo registro en la base de datos de acuerdo a los criterios
+     * del formulario.
+     *
+     * @param Array $datos contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String ok: La consulta retorna un ingreso correcto
+     *                fallo: La consulta retorna un ingreso incorrecto
+     */
+    public function formularioReestructuracion($datos)
+    {
+        $plantilla = $this->plantillas->render('carteras/formulariosVarios.html', ['datos' => $datos, 'parametro' => $datos['parametro']]);
+        echo $plantilla;
+    }
+
+    /**
+     * Función que obtiene formularios de ultilidades varias dependiendo el parametro
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function iniciarPausa($datos)
+    {
+        $this->claseCarteras->controlador($datos);
+        $plantilla = $this->plantillas->render('carteras/formulariosVarios.html', ['parametro' => $datos['parametro'], 'carteraActual' => $datos['cartera'], 'datos' => $datos]);
+        echo $plantilla;
+    }
+
+    /**
+     * Función que obtiene los datos de contacto de acuerdo a la acción 
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return Array restultado contiene los parametros de contacto
+     */
+    public function obtenerContactosAccion($datos)
+    {
+        $resultado = Array();
+        $contactos = $this->claseCarteras->controlador($datos);
+        $contador = sizeof($contactos);
+        $resultado['contacto'] = $contactos;
+        $resultado['contador'] = $contador;
+        $resultado = json_encode($resultado);
+        echo $resultado;
+    }
+
+    /**
+     * Función que obtiene los datos de efecto de acuerdo al contacto
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return Array restultado contiene los parametros de efecto
+     */
+    public function obtenerEfectosContacto($datos)
+    {
+        $resultado = Array();
+        $respuesta = $this->claseCarteras->controlador($datos);
+        $contador = sizeof($respuesta['efectos']);
+        $resultado['efecto'] = $respuesta['efectos'];
+        $resultado['contador'] = $contador;
+        $resultado['motivos'] = $respuesta['motivos'];
+        $resultado['actividades'] = $respuesta['actividades'];
+        $retorno = json_encode($resultado);
+        echo $retorno;
+    }
+
+    public function guardarGestion($datos)
+    {
+        $resultado = $this->claseCarteras->controlador($datos);
+    }
+
+    public function refrescarHistorico($datos)
+    {
+        $resultado = $this->claseCarteras->controlador($datos);
+        $plantilla = $this->plantillas->render('carteras/formulariosVarios.html', ['parametro' => 'tablaHistorico',
+            'datos' => $resultado]);
+        echo $plantilla;
+    }
+
+    public function refrescarDemograficos($datos)
+    {
+        $resultado = $this->claseCarteras->controlador($datos);
+        $plantilla = $this->plantillas->render('carteras/   formulariosVarios.html', ['parametro' => 'tablaHistorico',
+            'datos' => $resultado]);
+        echo $plantilla;
+    }
+
+    /**
+     * Función que construye el módulo de administración de clientes, consultando los datos
+     * de los usuario existentes en la base, posteriormente renderiza la plantilla con dichos datos
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function autocompletar($datos)
+    {
+        parse_str($datos['datos'], $formulario);
+        $guion = $this->claseCarteras->controlador($datos);
+        $guion = str_replace('+telefono+', $formulario['telefonos'], utf8_encode($guion[0]['guion']));
+        $guion = str_replace('+obligacion+', $formulario['obligacion'], $guion);
+        $guion = str_replace('+valor_acuerdo+', $formulario['valor_acuerdo'], $guion);
+        $guion = str_replace('+tipo_negociacion+', $formulario['tipo_negociacion'], $guion);
+        echo $guion;
+    }
+
+    /**
+     * Función que construye el módulo de administración de roles, consultando los datos
+     * de los roles existentes en la base, posteriormente renderiza la plantilla con dichos datos
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function administracionTareas($datos)
+    {
+        $tareas = $this->claseCarteras->controlador($datos);
+        $plantilla = $this->plantillas->render('carteras/administracionTareas.html', ['tareas' => $tareas]);
+        echo $plantilla;
+    }
+
+    /**
+     * Función que construye el módulo de administración de roles, consultando los datos
+     * de los roles existentes en la base, posteriormente renderiza la plantilla con dichos datos
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function administracionArbol($datos)
+    {
+        $arbol = $this->claseCarteras->controlador($datos);
+        $plantilla = $this->plantillas->render('carteras/administracionArbol.html', ['arbol' => $arbol]);
+        echo $plantilla;
+    }
+
+    /**
+     * Función que construye el módulo de administración de roles, consultando los datos
+     * de los roles existentes en la base, posteriormente renderiza la plantilla con dichos datos
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function parametroArbol($datos)
+    {
+
+        $parametros = $this->claseCarteras->controlador($datos);
+        $plantilla = $this->plantillas->render('carteras/resultadoFormularios.html', ['parametros' => $parametros, 'parametro' => 'formularioArbol',
+            'tipo' => $datos['tipo'],
+            'cartera' => $datos['cartera'],
+            'parametro_id' => $datos['parametro']]);
+
+        echo $plantilla;
+    }
+
+    /**
+     * Función que construye el módulo de administración de roles, consultando los datos
+     * de los roles existentes en la base, posteriormente renderiza la plantilla con dichos datos
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function crearParametroArbol($datos)
+    {
+
+        $resultado = $this->claseCarteras->controlador($datos);
+        $retorno = (count($resultado) >= 1) ? 'ok' : 'fallo';
+
+        echo $retorno;
+    }
+
+    /**
+     * Función que construye el módulo de administración de roles, consultando los datos
+     * de los roles existentes en la base, posteriormente renderiza la plantilla con dichos datos
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function administracionRoles($datos)
+    {
+        $roles = $this->claseAdministracion->controlador($datos);
+        $plantilla = $this->plantillas->render('administracionRoles.html', ['roles' => $roles['roles']]);
+        echo $plantilla;
+    }
+
+    /**
+     * Función que construye el módulo de administración de roles, consultando los datos
+     * de los roles existentes en la base, posteriormente renderiza la plantilla con dichos datos
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function administracionRegiones($datos)
+    {
+        $roles = $this->claseAdministracion->controlador($datos);
+        $plantilla = $this->plantillas->render('administracionGeograficos.html', ['roles' => $roles['roles']]);
+        echo $plantilla;
+    }
+
+    /**
+     * Función que construye el módulo de administración de roles, consultando los datos
+     * de los roles existentes en la base, posteriormente renderiza la plantilla con dichos datos
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function administracionDepartamentos($datos)
+    {
+        $roles = $this->claseAdministracion->controlador($datos);
+        $plantilla = $this->plantillas->render('administracionGeograficos.html', ['roles' => $roles['roles']]);
+        echo $plantilla;
+    }
+
+    /**
+     * Función que construye el módulo de administración de roles, consultando los datos
+     * de los roles existentes en la base, posteriormente renderiza la plantilla con dichos datos
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function administracionCiudades($datos)
+    {
+        $roles = $this->claseAdministracion->controlador($datos);
+        $plantilla = $this->plantillas->render('administracionGeograficos.html', ['roles' => $roles['roles']]);
+        echo $plantilla;
+    }
+
+    /**
+     * Función que construye el módulo de administración de roles, consultando los datos
+     * de los roles existentes en la base, posteriormente renderiza la plantilla con dichos datos
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function administracionPermisos($datos)
+    {
+        $menus = $this->claseAdministracion->controlador($datos);
+        $plantilla = $this->plantillas->render('administracion/administracionPermisos.html', ['menus' => $menus['menus'],
+            'roles' => $menus['roles'],
+            'permisos' => $menus['permisos']]);
+        echo $plantilla;
+    }
+
+    /**
+     * 
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function administracionInformes($datos)
+    {
+        session_start();
+        $plantilla = $this->plantillas->render('administracionInformes.html', ['perfil' => $_SESSION['perfil']]);
+        echo $plantilla;
+    }
+
+    /**
+     * Esta function crea un nuevo usuario en la base de datos de acuerdo a los criterios
+     * del formulario.
+     * 
+     * @param Array $datos contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String ok: La consulta retorna un ingreso correcto
+     *                fallo: La consulta retorna un ingreso incorrecto
+     */
+    public function crearNuevoUsuario($datos)
+    {
+        $respuesta = $this->claseAdministracion->controlador($datos);
+        $resultado = ($respuesta >= 1) ? 'ok' : 'fallo';
+
+        echo $resultado;
+    }
+
+    /**
+     * Esta function crea un nuevo formulario para crear registros según sea requerido
+     * 
+     * @param Array $datos contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String ok: La consulta retorna un ingreso correcto
+     *                fallo: La consulta retorna un ingreso incorrecto
+     */
+    public function formulariosCreacionRegistro($datos)
+    {
+        $plantilla = $this->plantillas->render('carteras/formulariosCreacion.html', ['parametro' => $datos['parametro'],
+            'datos' => $datos]);
+        echo $plantilla;
+    }
+
+    /**
+     * Esta function crea un nuevo registro en la base de datos de acuerdo a los criterios
+     * del formulario.
+     * 
+     * @param Array $datos contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String ok: La consulta retorna un ingreso correcto
+     *                fallo: La consulta retorna un ingreso incorrecto
+     */
+    public function creacionRegistro($datos)
+    {
+        $respuesta = $this->claseAdministracion->controlador($datos);
+        $resultado = ($respuesta >= 1) ? 'ok' : 'fallo';
+        echo $resultado;
+    }
+
+    /**
+     * Esta function crea un nuevo registro en la base de datos de acuerdo a los criterios
+     * del formulario.
+     * 
+     * @param Array $datos contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String ok: La consulta retorna un ingreso correcto
+     *                fallo: La consulta retorna un ingreso incorrecto
+     */
+    public function formulariosCreacionDemografico($datos)
+    {
+        $return = Array();
+        $plantilla = $this->plantillas->render('carteras/formulariosVarios.html', ['datos' => $datos, 'parametro' => $datos['parametro']]);
+
+        echo $plantilla;
+    }
+
+    /**
+     * Esta function crea un nuevo registro en la base de datos de acuerdo a los criterios
+     * del formulario.
+     *
+     * @param Array $datos contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String ok: La consulta retorna un ingreso correcto
+     *                fallo: La consulta retorna un ingreso incorrecto
+     */
+    public function creacionDemografico($datos)
+    {
+        $return = Array();
+        $respuesta = $this->claseAdministracion->controlador($datos);
+        $resultado = ($respuesta['resultado'] >= 1) ? 'ok' : 'fallo';
+        $plantilla = $this->plantillas->render('carteras/resultadoFormularios.html', ['parametro' => $datos['accion'],
+            'datos' => $respuesta['datos']]);
+
+        $return['plantilla'] = $plantilla;
+        $return['respuesta'] = $resultado;
+        $return['div'] = $datos['div'];
+
+        echo json_encode($return);
+    }
+
+    /**
+     * Función que obtiene los permisos de un usuario y construye 
+     * un formulario para el modal de edición de permisos
+     * 
+     * @param Array $datos contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     * 
+     */
+    public function obtenerPermisos($datos)
+    {
+        $usuarios = $this->claseAdministracion->controlador($datos);
+        $plantilla = $this->plantillas->render('resultadoFormularios.html', ['permisos' => $usuarios['permisos'],
+            'roles' => $usuarios['roles'],
+            'clientes' => $usuarios['clientes'],
+            'usuario' => $datos['usuario'],
+            'parametro' => 'formularioPermisos']);
+        echo $plantilla;
+    }
+
+    /**
+     * Funcion que almacena los permisos por campaña para cada usuario
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function guardarPermisos($datos)
+    {
+        $respuesta = $this->claseAdministracion->controlador($datos);
+        $resultado = ($respuesta >= 1) ? 'ok' : 'fallo';
+
+        echo $resultado;
+    }
+
+    /**
+     * Funcion que se encarga de borrar un registro de acuerdo al parametro enviado
+     * dede el formulario.
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String $retorno: array json con la información de resultado de la consulta 
+     *                          y la función javascript a ejecutar
+     */
+    public function borrarRegistro($datos)
+    {
+        $respuesta = $this->claseAdministracion->controlador($datos);
+        $resultado = ($respuesta >= 1 || $respuesta <= -1) ? 'ok' : 'fallo';
+
+        $retorno = json_encode(Array('resultado' => $resultado,
+            'ajax' => $datos['ajax']));
+        echo $retorno;
+    }
+
+    /**
+     * Función que construye el formulario de edición de acuerdo al parametro enviado
+     * 
+     * @param type $datos
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String $resultado: array json con la información de resultado de la consulta 
+     *                          y la función javascript a ejecutar
+     */
+    public function formularioEditarRegistro($datos)
+    {
+        $resultado = $this->claseAdministracion->controlador($datos);
+        $plantilla = $this->plantillas->render('resultadoFormularios.html', ['parametro' => $datos['tipo'],
+            'datos' => $resultado]);
+        echo $plantilla;
+    }
+
+    /**
+     * Funcion que se encarga de editar un registro de acuerdo al parametro enviado
+     * dede el formulario.
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String $retorno: array json con la información de resultado de la consulta 
+     *                          y la función javascript a ejecutar
+     */
+    public function editarRegistro($datos)
+    {
+        $respuesta = $this->claseAdministracion->controlador($datos);
+        $resultado = ($respuesta >= 1 || $respuesta <= -1) ? 'ok' : 'fallo';
+
+        $retorno = json_encode(Array('resultado' => $resultado,
+            'ajax' => $datos['ajax']));
+        echo $retorno;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    public function buscarUsuarios($datos)
+    {
+        $resultados = $this->claseAdministracion->controlador($datos);
+        $plantilla = $this->plantillas->render('resultadoBusquedas.html', ['resultados' => $resultados,
+            'parametro' => 'busquedaUsuarios']);
+        echo $plantilla;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    public function buscarMenusPermiso($datos)
+    {
+        $resultados = $this->claseAdministracion->controlador($datos);
+        $plantilla = $this->plantillas->render('resultadoBusquedas.html', ['resultados' => $resultados,
+            'parametro' => 'busquedaMenusPermiso']);
+        echo $plantilla;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    public function perfilUsuario($datos)
+    {
+        $usuario = $this->claseAdministracion->controlador($datos);
+        $plantilla = $this->plantillas->render('perfil.html', ['usuario' => $usuario]);
+        echo $plantilla;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    public function actualizarInformacionPersonal($datos)
+    {
+        $respuesta = $this->claseAdministracion->controlador($datos);
+        $resultado = ($respuesta >= 1) ? 'ok' : 'fallo';
+
+        echo $resultado;
+    }
+
+    public function obtenerAlarmas($datos)
+    {
+        $resultado = $this->claseAdministracion->controlador($datos);
+        $plantilla = $this->plantillas->render('resultadoBusquedas.html', ['factura' => $factura,
+            'parametro' => 'construirTablaFacturacion']);
+
+        echo $plantilla;
+    }
+
+    public function generarInforme($datos)
+    {
+
+        $retorno = $this->claseCarteras->controlador($datos);
+        $array = array();
+        echo $retorno;
+    }
+
+    /**
+     * Función para realizar carga de los archivos
+     * 
+     * @param type $datos
+     * @return String Mensaje devuelto por la carga
+     */
+    public function cargarArchivo($datos)
+    {
+        $tipo = $datos['tipo'];
+        $mensaje = $this->$tipo($datos);
+        echo $mensaje;
+    }
+
+    /**
+     * Función que construye el módulo de administración de roles, consultando los datos
+     * de los roles existentes en la base, posteriormente renderiza la plantilla con dichos datos
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function administracionCarga($datos)
+    {
+        $menus = $this->claseAdministracion->controlador($datos);
+        $plantilla = $this->plantillas->render('administracion/administracionCarga.html', ['cartera' => $datos['carteraActual']]);
+        echo $plantilla;
+    }
+
+    /**
+     * Función que construye el módulo de administración de roles, consultando los datos
+     * de los roles existentes en la base, posteriormente renderiza la plantilla con dichos datos
+     * 
+     * @param Array $datos: contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String plantilla renderizada con la información requerida
+     */
+    public function miProductividad($datos)
+    {
+        $data = $this->claseCarteras->controlador($datos);
+        $plantilla = $this->plantillas->render('carteras/formulariosVarios.html', ['datos' => $data, 'parametro' => 'miProductividad']);
+
+        $array = Array();
+        /*
+          $array['clientes'] = $data['clientes'][0]['clientes'];
+          $array['gestiones'] = $data['gestiones'][0]['gestiones'];
+          $array['promesas'] = $data['promesas'][0]['promesas'];
+          $array['posibles'] = $data['posibles'][0]['posibles']; */
+        $array['directos'] = $data['directos'];
+
+        $retorno = json_encode(Array('plantilla' => $plantilla,
+            'resultados' => $array));
+        echo $retorno;
+    }
+
+    /**
+     * 
+     * 
+     */
+    public function cargarAsignacion($datos)
+    {
+        $fecha = date('Y-m');
+        $ruta = '../../public/archivos/cargas/asignacion' . $fecha . '.csv';
+        $resultado = move_uploaded_file($_FILES['archivo']['tmp_name'], $ruta);
+
+        $return = $this->claseCarteras->controlador(array('ruta' => $ruta, 'metodo' => 'cargarAsignacion',
+            'cartera' => $datos['cartera'], 'vigencia_asignacion' => $datos['vigencia_asignacion']));
+        echo $return;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    public function cargarTarea($datos)
+    {
+        $fecha = date('Y-m');
+        $ruta = '../../public/archivos/cargas/tarea' . $fecha . '.csv';
+        $resultado = move_uploaded_file($_FILES['archivo']['tmp_name'], $ruta);
+
+        $return = $this->claseCarteras->controlador(array('ruta' => $ruta, 'metodo' => 'cargarTarea',
+            'cartera' => $datos['cartera'],
+            'datos' => $datos));
+        echo $return;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    public function cargarPagos($datos)
+    {
+        $ruta = '../../public/archivos/cargas/pagos-' . $datos['cartera'] . '.csv';
+        $resultado = move_uploaded_file($_FILES['archivo']['tmp_name'], $ruta);
+
+        $return = $this->claseCarteras->controlador(array('ruta' => $ruta, 'metodo' => 'cargarPagos',
+            'cartera' => $datos['cartera'],
+            'datos' => $datos));
+        echo $return;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    public function consultarTareas($datos)
+    {
+        $tareas = $this->claseCarteras->controlador($datos);
+        $cantidad = count($tareas);
+        $plantilla = $this->plantillas->render('carteras/formulariosVarios.html', ['parametro' => 'listadoTareas',
+            'tareas' => $tareas]);
+        $retorno = json_encode(Array('plantilla' => $plantilla,
+            'cantidad' => $cantidad));
+        echo $retorno;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    public function cambiarOrdenTarea($datos)
+    {
+        $resultado = $this->claseCarteras->controlador($datos);
+
+        $retorno = json_encode(Array('plantilla' => $plantilla,
+            'cantidad' => $cantidad));
+        echo $retorno;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    public function consultarNotificaciones($datos)
+    {
+        $notificaciones = $this->claseCarteras->controlador($datos);
+        $conteo_agendamiento = count($notificaciones['agendamiento']);
+        $conteo_mensajes = count($notificaciones['mensajes']);
+        $cantidad = ($conteo_agendamiento + $conteo_mensajes);
+        $plantilla = $this->plantillas->render('carteras/formulariosVarios.html', ['parametro' => 'listadoNotificaciones',
+            'notificaciones' => $notificaciones]);
+        $retorno = json_encode(Array('plantilla' => $plantilla,
+            'cantidad' => $cantidad));
+        echo $retorno;
+    }
+
+    /**
+     *
+     *
+     */
+    public function administracionCartera($datos)
+    {
+        $data = $this->claseCarteras->controlador($datos);
+        $plantilla = $this->plantillas->render('carteras/administracionCartera.html', ['cartera' => $datos['carteraActual'], 'datos' => $data]);
+        echo $plantilla;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    public function seleccionarObligacionesGestion($datos)
+    {
+        $obligaciones = $this->claseCarteras->controlador($datos);
+        $plantilla = $this->plantillas->render('carteras/formulariosVarios.html', ['parametro' => 'seleccionarObligacionesGestion',
+            'carteraActual' => $datos['cartera'], 'obligaciones' => $obligaciones]);
+        echo $plantilla;
+    }
+
+    /**
+     * Esta función crea un nuevo item homologado de acuerdo a los parametros de cada lider de campaña
+     *
+     * @param Type array: $datos contiene la información requerida para parametrizar las consultas
+     * @return type int: $retorno:retorna la cantidad de items afectados
+     * */
+    public function crearHomologado($datos)
+    {
+        $resultado = $this->claseCarteras->controlador($datos);
+        $retorno = (count($resultado) >= 1) ? 'ok' : 'fallo';
+
+        return $retorno;
+    }
+
+    /**
+     * Esta function crea un nuevo usuario en la base de datos de acuerdo a los criterios
+     * del formulario.
+     * 
+     * @param Array $datos contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String ok: La consulta retorna un ingreso correcto
+     *                fallo: La consulta retorna un ingreso incorrecto
+     */
+    public function crearTelefono($datos)
+    {
+        $respuesta = $this->claseAdministracion->controlador($datos);
+        $resultado = ($respuesta >= 1) ? 'ok' : 'fallo';
+
+        echo $resultado;
+    }
+
+    /**
+     * Esta function crea un nuevo usuario en la base de datos de acuerdo a los criterios
+     * del formulario.
+     * 
+     * @param Array $datos contiene el metodo al que apunta y datos adicionales opcionales
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return String ok: La consulta retorna un ingreso correcto
+     *                fallo: La consulta retorna un ingreso incorrecto
+     */
+    public function estadoTarea($datos)
+    {
+        $respuesta = $this->claseCarteras->controlador($datos);
+
+        $resultado = json_encode($respuesta);
+
+        echo $resultado;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    public function borrarContenidoCarpeta($datos)
+    {
+        $dir = '../../public/archivos/descargas/' . $datos['cartera'] . '/';
+        $files = scandir($dir); // Devuelve un vector con todos los archivos y directorios
+        $ficherosEliminados = 0;
+        foreach ($files as $f) {
+            if (is_file($dir . $f)) {
+                if (unlink($dir . $f)) {
+                    $ficherosEliminados++;
+                }
+            }
+        }
+        $respuesta = "Se han eliminado : <strong>" . $ficherosEliminados . "</strong> ficherons correctamente";
+        echo $respuesta;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    public function guardarTiempoMuerto($datos)
+    {
+        $resultado = $this->claseCarteras->controlador($datos);
+    }
+
+    public function validarCredenciales($datos = array())
+    {
+        $resultado = $this->claseCarteras->controlador($datos);
+        $retorno = (count($resultado) >= 1) ? true : false;
+        echo $retorno;
+    }
+
+    public function guardarTiemposSesion($datos = array())
+    {
+        $segundos = $this->horaASegundos($datos['tiempo']);
+        $_SESSION['tiempo_pausa'] = $segundos;
+        $_SESSION['tipo_pausa'] = $datos['tipo'];
+        $_SESSION['label_pausa'] = $datos['label'];
+    }
+
+    public function horaASegundos($pa6)
+    {
+        list($h, $m, $s) = explode(':', $pa6);
+        return ($h * 3600) + ($m * 60) + $s;
+    }
+
+    /**
+     * Función que crea un cliente nuevo
+     * @param Array $datos arreglo con los datos de creación del cliente
+     * @author Jonanthan Murcia <desarrollo@fianzaltda.com>
+     */
+    public function crearCliente($datos)
+    {
+        $rutaImagen = '/logos_clientes/' . $datos['nombre_cliente'] . '.png';
+        $return = $this->claseAdministracion->controlador(array('ruta' => $rutaImagen, 'metodo' => 'crearCliente', 'nombre_cliente' => $datos['nombre_cliente']));
+        $ruta = '../../public/images/logos_clientes/' . $datos['nombre_cliente'] . '.png';
+        if ($return['resultado'] == 'ok') {
+            if (!file_exists($ruta)) {
+                $resultado = move_uploaded_file($_FILES['archivo']['tmp_name'], $ruta);
+            }
+            if (!empty($return['id_cliente'])) {
+                $this->crearRutas($return['id_cliente']);
+            }
+        }
+
+        echo json_encode($return);
+    }
+
+    private function crearRutas($id)
+    {
+        $rutas = array('descargas' => '../../public/archivos/descargas/' . $id . '/',
+            'informes' => '../../public/archivos/descargas/' . $id . '/informes/');
+
+        foreach ($rutas as $ruta) {
+            mkdir($ruta, 0777);
+        }
+    }
+
+    /**
+     * Metodo para realiza la busqueda de la referencia de pago y los pagos realizadas a la obligación
+     * 
+     * @param array $datos contiene la información para el cargue de la cartera
+     * @author Jonnathan Murcia <jjmurciab@gmail.com>
+     * @return string $plantilla imprime la plantilla con los datos cargados
+     */
+    public function busquedaReferencia($datos)
+    {
+        $resultado = $this->claseCarteras->controlador($datos);
+
+        $plantilla = $this->plantillas->render('carteras/resultadoFormularios.html', ['parametro' => 'busquedaReferencia',
+            'datos' => $datos, 'resultado' => $resultado]);
+        echo $plantilla;
+    }
+
+    public function administrarObligatoriedad($datos)
+    {
+
+        $resultado = $this->claseCarteras->controlador($datos);
+        $plantilla = $this->plantillas->render('carteras/resultadoFormularios.html', ['parametros' => $resultado,
+            'parametro' => 'parametroObligatoriedad', 'cartera' => $datos['cartera'],
+            'accion' => $datos['accion'], 'contacto' => $datos['contacto'], 'efecto' => $datos['efecto']]);
+        echo $plantilla;
+    }
+
+    public function busquedaEfecto($datos)
+    {
+        $retornar = Array();
+        $resultado = $this->claseCarteras->controlador($datos);
+
+        $retornar['efecto'] = $resultado;
+        echo json_encode($retornar);
+    }
+
+    public function guardarObligatoriedad($datos)
+    {
+        $resultado = $this->claseCarteras->controlador($datos);
+        $respuesta = ($resultado >= 1) ? 'ok' : 'fallo';
+        echo json_encode($respuesta);
+    }
+
+    public function searchObligatoriedad($datos)
+    {
+        $respuesta = Array();
+        $resultado = $this->claseCarteras->controlador($datos);
+
+        $respuesta['campos'] = $resultado;
+        echo json_encode($respuesta);
+    }
+
+    public function guardarGuion($datos)
+    {
+        $resultado = $this->claseCarteras->controlador($datos);
+        $respuesta = ($resultado >= 1) ? 'ok' : 'fallo';
+
+        echo json_encode($respuesta);
+    }
+
+    public function buscarGuion($datos)
+    {
+        $resultado = $this->claseCarteras->controlador($datos);
+
+        echo json_encode($resultado[0]['guion']);
+    }
+
+}

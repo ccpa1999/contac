@@ -1,0 +1,1 @@
+INSERT INTO pausas (tipo_pausa, tiempo_pausa, usuario, fecha_pausa, cartera) VALUES ('tiempo_muerto', '00:00:02', 'vsuarez', NOW(), '2')

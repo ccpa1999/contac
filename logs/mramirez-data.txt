@@ -1,0 +1,449 @@
+Array
+(
+    [cartera] => Array
+        (
+            [0] => Array
+                (
+                    [id_cliente] => 4
+                    [nombre_cliente] => Claro Fijo
+                    [controlador] => carterasController.php
+                    [ruta_logo] => /logos_clientes/Claro-logo-logotype-1024x768.png
+                    [estado] => 1
+                )
+
+        )
+
+    [cliente] => Array
+        (
+            [cliente] => Array
+                (
+                    [0] => Array
+                        (
+                            [id_deudor] => 306845
+                            [nombre] => MICHEL STE ESPITIA ROMERO
+                            [cedula] => 1016057481
+                            [estado] => 1
+                            [bloqueo_gestion] => 0
+                        )
+
+                )
+
+            [obligaciones] => Array
+                (
+                    [0] => Array
+                        (
+                            [id_obligacion] => 309241
+                            [producto] => VOZ@TV
+                            [cedula_deudor] => 1016057481
+                            [cartera] => 4
+                            [numero_obligacion] => 69560142
+                            [entidad] => 
+                            [regional] => MOSQUERA
+                            [estrategia_inicial] => 
+                            [estrategia_actual] => 
+                            [obligaciones] => 
+                            [ultimo_efecto] => MENSAJE VIRTUAL
+                            [valor_actual_inicial] => 
+                            [valor_maximo] => 
+                            [fecha_apertura] => 18/05/2017
+                            [plazo] => 
+                            [dia_facturacion] => 
+                            [modalidad] => 
+                            [franja_actual] => 
+                            [estado_reparto] => Masivo Pago Puntual
+                            [user_id] => 
+                            [mono_multi] => 
+                            [nueva_marca_foco] => 
+                            [estapa_proceso_juridico] => 
+                            [codigo_garantia] => 
+                            [fecha_ultimo_alivio] => 
+                            [estado_ciclo] => 
+                            [estado_obligacion] => NO RECUPERADO
+                            [codigo_recuperacion] => 
+                            [fecha_actualizacion_inicial] => 
+                            [fecha_actualizacion] => 
+                            [dias_mora_inicial] => 0
+                            [dias_mora_actual] => 0
+                            [fecha_pago] => 
+                            [saldo_capital_inicial] => 
+                            [saldo_capital] => 
+                            [interes_sobre_saldo] => 
+                            [saldo_total] => 
+                            [valor_cuota] => 
+                            [capital_mora] => 
+                            [intereses_mora] => 
+                            [cargo_cobranzas] => 
+                            [cantidad_disputada] => 
+                            [saldo_mora] => $ 254.380
+                            [pagos_mes_cliente] => 
+                            [pagos_por_obligacion] => 
+                            [fecha_ultimo_pago] => 
+                            [ciclo_mora_inicial_obligacion] => 
+                            [ciclo_mora_actual_sistema] => 
+                            [porcentaje_gac] => 
+                            [pago_fianza] => 
+                            [fecha_seguro] => 
+                            [valor_seguro] => 
+                            [valor_provisionado] => 
+                            [otros_cargos] => 
+                            [zona] => 4.3 BOGOTA OCCIDENTE
+                            [saldo_expuesto] => 254380
+                            [fecha_vigencia_asignacion] => 2017-06-01
+                            [estado] => 1
+                        )
+
+                )
+
+            [direcciones] => Array
+                (
+                    [0] => Array
+                        (
+                            [id_direccion] => 305930
+                            [cedula_deudor] => 1016057481
+                            [tipo_direccion] => 
+                            [ciudad] => MOSQUERA
+                            [direccion] => CL 1 3-20 BLC CASA4
+                            [estado] => 1
+                        )
+
+                )
+
+            [emails] => Array
+                (
+                    [0] => Array
+                        (
+                            [id_correo] => 185250
+                            [cedula_deudor] => 1016057481
+                            [tipo_correo] => 
+                            [correo] => MICHOLESPITIAL1001@hotmail.com
+                            [estado] => 1
+                        )
+
+                )
+
+            [telefonos] => Array
+                (
+                    [0] => Array
+                        (
+                            [id_telefono] => 791523
+                            [cedula_deudor] => 1016057481
+                            [tipo_telefono] => teléfono residencia
+                            [telefono] => 14598037
+                            [estado] => 1
+                        )
+
+                    [1] => Array
+                        (
+                            [id_telefono] => 824273
+                            [cedula_deudor] => 1016057481
+                            [tipo_telefono] => teléfono oficina
+                            [telefono] => 18299278
+                            [estado] => 1
+                        )
+
+                    [2] => Array
+                        (
+                            [id_telefono] => 758764
+                            [cedula_deudor] => 1016057481
+                            [tipo_telefono] => celular
+                            [telefono] => 3167579672
+                            [estado] => 1
+                        )
+
+                )
+
+        )
+
+    [gestion] => Array
+        (
+            [acciones] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 4
+                            [id_accion] => 8
+                            [homologado] => Hacer Llamada
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 5
+                            [id_accion] => 11
+                            [homologado] => recibir llamada
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                )
+
+            [contacto] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 4
+                            [id_contacto] => 2
+                            [homologado] => Mensaje de Voz
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 5
+                            [id_contacto] => 3
+                            [homologado] => Esposo(a)
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [2] => Array
+                        (
+                            [id] => 6
+                            [id_contacto] => 4
+                            [homologado] => Titular
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [3] => Array
+                        (
+                            [id] => 7
+                            [id_contacto] => 6
+                            [homologado] => Encargado
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [4] => Array
+                        (
+                            [id] => 8
+                            [id_contacto] => 7
+                            [homologado] => Familiar
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [5] => Array
+                        (
+                            [id] => 13
+                            [id_contacto] => 8
+                            [homologado] => NO CONOCEN DESTINATARIO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [6] => Array
+                        (
+                            [id] => 11
+                            [id_contacto] => 9
+                            [homologado] => NO CONTESTAN
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [7] => Array
+                        (
+                            [id] => 9
+                            [id_contacto] => 10
+                            [homologado] => Tercero
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [8] => Array
+                        (
+                            [id] => 16
+                            [id_contacto] => 11
+                            [homologado] => OTRO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                )
+
+            [motivo_no_pago] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 43
+                            [id_efecto] => 85
+                            [homologado] => COLGO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 44
+                            [id_efecto] => 86
+                            [homologado] => INSOLVENTE
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [2] => Array
+                        (
+                            [id] => 45
+                            [id_efecto] => 93
+                            [homologado] => MENSAJE DE VOZ
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [3] => Array
+                        (
+                            [id] => 46
+                            [id_efecto] => 94
+                            [homologado] => NO CONTESTAN
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [4] => Array
+                        (
+                            [id] => 47
+                            [id_efecto] => 133
+                            [homologado] => YA PAGO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [5] => Array
+                        (
+                            [id] => 48
+                            [id_efecto] => 120
+                            [homologado] => RENUENTE
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [6] => Array
+                        (
+                            [id] => 49
+                            [id_efecto] => 117
+                            [homologado] => RECORDATORIO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [7] => Array
+                        (
+                            [id] => 50
+                            [id_efecto] => 114
+                            [homologado] => RECLAMACION
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [8] => Array
+                        (
+                            [id] => 51
+                            [id_efecto] => 91
+                            [homologado] => ILOCALIZADO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [9] => Array
+                        (
+                            [id] => 52
+                            [id_efecto] => 95
+                            [homologado] => NO RECIBIDA
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [10] => Array
+                        (
+                            [id] => 53
+                            [id_efecto] => 106
+                            [homologado] => POSIBLE NEGOCIACION
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [11] => Array
+                        (
+                            [id] => 54
+                            [id_efecto] => 108
+                            [homologado] => PROMESA
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [12] => Array
+                        (
+                            [id] => 55
+                            [id_efecto] => 98
+                            [homologado] => OCUPADO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [13] => Array
+                        (
+                            [id] => 56
+                            [id_efecto] => 97
+                            [homologado] => NO CONOCEN DESTINATARIO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [14] => Array
+                        (
+                            [id] => 57
+                            [id_efecto] => 99
+                            [homologado] => PROMESA ROTA
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [15] => Array
+                        (
+                            [id] => 58
+                            [id_efecto] => 99
+                            [homologado] => SE HABLO CON TERCERO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                    [16] => Array
+                        (
+                            [id] => 59
+                            [id_efecto] => 91
+                            [homologado] => NO CONOCEN DESTINATARIO
+                            [id_cliente] => 4
+                            [estado] => 1
+                        )
+
+                )
+
+        )
+
+    [historial] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 38359
+                    [fecha_gestion] => 2017-05-29 11:15:08
+                    [gestor] => iordonez
+                    [cedula_deudor] => 1016057481
+                    [obligacion] => 
+                    [fecha_seguimiento] => 
+                    [valor_acuerdo] => $ 254.380 	
+                    [fecha_acuerdo] => 2017/05/31
+                    [motivo_no_pago] => 
+                    [telefono] => 
+                    [tipo_negociacion] => 
+                    [actividad_economica] => 
+                    [observaciones] => 91-8299278 Contesta el sr  paulo papa de titular, encargado de los pagos e indica realizar el pago el dia 31 de mayo, por el valor de $ 254.380 	
+                    [accion] => Hacer Llamada
+                    [efecto] => PROMESA
+                    [contacto] => Titular
+                )
+
+        )
+
+)

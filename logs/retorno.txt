@@ -1,0 +1,483 @@
+       <div class="row">
+        <div class="col-md-12 switch">
+            <div class="switch-right-grid">
+                <div class="container-fluid" style="padding-top: 7px;">
+                    <div class="row">
+                        <div class="col-xs-2 cedulaGestion" id="cedulaGestion" data-clipboard-text=" 19495556" title="Cedúla del cliente">
+                            <a href="#"><h4><i class="fa fa-user success"></i> 19495556</h4></a>
+                        </div>
+                        <div class="col-xs-5">
+                            <a href="#"><h4>EDGAR MANU BUITRAGO RODRIGUEZ</h4></a>
+                        </div>
+                        <div class="col-xs-3 col-xs-offset-2">
+                            <a href="#" class="siguienteClienteTarea" data-tarea="67"> <h4>SIGUIENTE <i class="fa fa-arrow-circle-right success fa-1x"></i></h4></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12 switch">
+            <div class="switch-right-grid">
+                <div class="container-fluid" style="padding-top: 7px; font-size: 14px;">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default">
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion" 
+                                       href="#collapsCreditos" aria-expanded="true" aria-controls="collapsCreditos" title="Creditos del cliente">
+                                        <h4><span class="fa fa-credit-card-alt success"></span> CREDITOS</h4></a>
+                                </div>
+                                <div class="col-xs-5">
+                                    <a href="#"><i class="fa fa-hand-o-left fa-2x success"></i> <i>"Haga clic en "CREDITOS" para desplegar la información de creditos"</i></a> 
+                                </div>
+                            </div>
+                            <div id="collapsCreditos" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr class="success">
+                                                <th>Estado Reparto</th>
+                                                <th>Número Obligación</th>
+                                                <th>Producto</th>
+                                                <th>Saldo Total</th>
+                                                <th>Saldo en Mora</th>
+                                                <th>Dias Mora Actual</th>
+                                                <th>Ciclo Mora Actual</th>
+                                                <th>Fecha Pago</th>
+                                                <th>Estado Obligación</th>
+                                                <th>Zona</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                                                            <tr class="obligacionGestion" data-obligacion="93175511" style="cursor:pointer;">
+                                                    <td>Masivo Edad 0</td>
+                                                    <td>93175511</td>
+                                                    <td>VOZ@TV</td>
+                                                    <td></td>
+                                                    <td>$ 106.586</td>
+                                                    <td>0</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td> NO RECUPERADO </td>
+                                                    <td>4.2 BOGOTA CENTRO</td>
+                                                </tr>
+                                                                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-12 switch">
+                    <div class="switch-right-grid " style="padding-top: 7px; font-size: 14px;" >
+                        <div class="panel-group container-fluid" id="accordion" role="tablist" aria-multiselectable="true">
+                            <div class="panel panel-default">
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion" 
+                                           href="#collapsDemograficos" aria-expanded="true" aria-controls="collapsDemograficos" title="Creditos del cliente">
+                                            <h4><span class="fa fa-map-o success"></span> DEMOGRÁFICOS</h4></a>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <a href="#"><i class="fa fa-hand-o-left success fa-2x"></i> <i>"Haga clic en "DEMOGRAFICOS" para desplegar la información demográfica"</i></a> 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div id="collapsDemograficos" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                        <div class="panel-body">
+                                            <div class="row" style="font-size: 16px;">
+                                                <div class="col-md-12">
+                                                    <ul id="myTabs" class="nav nav-tabs" role="tablist">
+                                                        <li class="active" role="presentation">
+                                                            <a id="home-tab" href="#telefonos" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                                                                <i class="fa fa-mobile fa-2x"></i> 
+                                                                Teléfonos</a>
+                                                        </li>
+                                                        <li role="presentation">
+                                                            <a id="profile-tab" href="#direcciones" role="tab" data-toggle="tab" aria-controls="profile">
+                                                                <i class="fa fa-map-marker  fa-2x"></i>
+                                                                Direcciones</a>
+                                                        </li>
+                                                    </ul>
+                                                    <div id="myTabContent" class="tab-content">
+                                                        <div id="telefonos" class="tab-pane fade in active" role="tabpanel" aria-labelledby="home-tab">
+                                                            <table class="table table-striped table-responsive">
+                                                                <thead>
+                                                                    <tr class="success">
+                                                                        <th>Teléfono</th>
+                                                                        <th>Tipo Teléfono</th>
+                                                                        <th>Estado</th>
+                                                                        <th>Acciones</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                                                                                            <tr style="height:30px; cursor:pointer;" class="telefonoGestion" data-telefono="0">
+                                                                            <td>0</td>
+                                                                            <td>Teléfono Residencia</td>
+                                                                            <td><label class="label label-success">Activo</td>
+                                                                            <td><div class="btn-group" role="group" aria-label="...">
+                                                                                    <a class="btn btn-primary formularioEditarRegistro" data-toggle="modal" 
+                                                                                       data-target="#editarRegistro" data-tipo="editarUsuario" data-id="628462" href="#" role="button">
+                                                                                        <span class="glyphicon glyphicon-edit"></span></a>
+                                                                                    <a class="btn btn-primary eliminarRegistro" data-toggle="modal" 
+                                                                                       data-target="#myModal" data-ajax="administracionUsuarios" data-accion="borrarUsuario" data-id="628462" href="#" role="button">
+                                                                                        <span class="glyphicon glyphicon-remove"></span></a>
+                                                                                </div></td>
+                                                                        </tr>
+                                                                                                                                            <tr style="height:30px; cursor:pointer;" class="telefonoGestion" data-telefono="14972049">
+                                                                            <td>14972049</td>
+                                                                            <td>Celular Oficina</td>
+                                                                            <td><label class="label label-success">Activo</td>
+                                                                            <td><div class="btn-group" role="group" aria-label="...">
+                                                                                    <a class="btn btn-primary formularioEditarRegistro" data-toggle="modal" 
+                                                                                       data-target="#editarRegistro" data-tipo="editarUsuario" data-id="643254" href="#" role="button">
+                                                                                        <span class="glyphicon glyphicon-edit"></span></a>
+                                                                                    <a class="btn btn-primary eliminarRegistro" data-toggle="modal" 
+                                                                                       data-target="#myModal" data-ajax="administracionUsuarios" data-accion="borrarUsuario" data-id="643254" href="#" role="button">
+                                                                                        <span class="glyphicon glyphicon-remove"></span></a>
+                                                                                </div></td>
+                                                                        </tr>
+                                                                                                                                            <tr style="height:30px; cursor:pointer;" class="telefonoGestion" data-telefono="3166284849">
+                                                                            <td>3166284849</td>
+                                                                            <td>Celular</td>
+                                                                            <td><label class="label label-success">Activo</td>
+                                                                            <td><div class="btn-group" role="group" aria-label="...">
+                                                                                    <a class="btn btn-primary formularioEditarRegistro" data-toggle="modal" 
+                                                                                       data-target="#editarRegistro" data-tipo="editarUsuario" data-id="612619" href="#" role="button">
+                                                                                        <span class="glyphicon glyphicon-edit"></span></a>
+                                                                                    <a class="btn btn-primary eliminarRegistro" data-toggle="modal" 
+                                                                                       data-target="#myModal" data-ajax="administracionUsuarios" data-accion="borrarUsuario" data-id="612619" href="#" role="button">
+                                                                                        <span class="glyphicon glyphicon-remove"></span></a>
+                                                                                </div></td>
+                                                                        </tr>
+                                                                                                                                    </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div id="direcciones" class="tab-pane fade" role="tabpanel" aria-labelledby="profile-tab">
+                                                            <div id="direcciones1" class="tab-pane fade in active" role="tabpanel" aria-labelledby="home-tab">
+                                                                <table class="table table-striped table-responsive">
+                                                                    <thead>
+                                                                        <tr class="success">
+                                                                            <th>Ciudad</th>
+                                                                            <th>Dirección</th>
+                                                                            <th>Estado</th>
+                                                                            <th>Acciones</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                                                                                                    <tr style="height:30px;">
+                                                                                <td>BOGOTA</td>
+                                                                                <td>CL 67 27A-32 201</td>
+                                                                                <td><label class="label label-success">Activo</td>
+                                                                                <td><div class="btn-group" role="group" aria-label="...">
+                                                                                        <a class="btn btn-primary formularioEditarRegistro" data-toggle="modal" 
+                                                                                           data-target="#editarRegistro" data-tipo="editarUsuario" data-id="262149" href="#" role="button">
+                                                                                            <span class="glyphicon glyphicon-edit"></span></a>
+                                                                                        <a class="btn btn-primary eliminarRegistro" data-toggle="modal" 
+                                                                                           data-target="#myModal" data-ajax="administracionUsuarios" data-accion="borrarUsuario" data-id="262149" href="#" role="button">
+                                                                                            <span class="glyphicon glyphicon-remove"></span></a>
+                                                                                    </div></td>
+                                                                            </tr>
+                                                                                                                                            </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div id="emails" class="tab-pane fade" role="tabpanel" aria-labelledby="profile-tab">
+                                                            <div id="direcciones1" class="tab-pane fade in active" role="tabpanel" aria-labelledby="home-tab">
+                                                                <button class="btn btn-success btnFormularioCreacionRegistro" data-parametro="email"><i class="fa fa-plus"></i> Agregar E-mail</button>
+                                                                <table class="table table-striped table-responsive">
+                                                                    <thead>
+                                                                        <tr class="success">
+                                                                            <th>E-mail</th>
+                                                                            <th>Estado</th>
+                                                                            <th>Acciones</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                                                                                                    <tr style="height:30px;">
+                                                                                <td></td>
+                                                                                <td><label class="label label-success">Activo</td>
+                                                                                <td><div class="btn-group" role="group" aria-label="...">
+                                                                                        <a class="btn btn-primary formularioEditarRegistro" data-toggle="modal" 
+                                                                                           data-target="#editarRegistro" data-tipo="editarUsuario" data-id="114644" href="#" role="button">
+                                                                                            <span class="glyphicon glyphicon-edit"></span></a>
+                                                                                        <a class="btn btn-primary eliminarRegistro" data-toggle="modal" 
+                                                                                           data-target="#myModal" data-ajax="administracionUsuarios" data-accion="borrarUsuario" data-id="114644" href="#" role="button">
+                                                                                            <span class="glyphicon glyphicon-remove"></span></a>
+                                                                                    </div></td>
+                                                                            </tr>
+                                                                                                                                            </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="col-md-12 switch">
+                <div class="switch-right-grid">
+                    <div class="container-fluid" style="padding-top:15px;">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <a href="#" title="Información"><h4><i class="fa fa-info-circle success"></i> INFORMACIÓN</h4></a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <a href="#"><h4>Ultimo Efecto</h4></a>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="label label-success">MENSAJE VIRTUAL</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <a href="#"><h4>Estado Obligación</h4></a>
+                            </div>
+                            <div class="col-xs-3">
+                                <h3><label class="label label-success"> NO RECUPERADO </label></h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <a href="#"><h4>Regional</h4></a>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="label label-success">BOGOTA</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <a href="#"><h4>Estrategia Actual</h4></a>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="label label-success"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <a href="#"><h4>Número Obligaciones</h4></a>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="label label-success"></label>
+                            </div>
+                            <div class="col-xs-3">
+                                <a href="#"><h4>Saldo Expuesto</h4></a>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="label label-success">106586</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <a href="#"><h5>Nueva Marca Foco</h5></a>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="label label-success"></label>
+                            </div>
+                            <div class="col-xs-3">
+                                <a href="#"><h4>Mono Multi</h4></a>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="label label-success"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12 switch">
+            <div class="switch-right-grid">
+                <div class="container-fluid" style="padding-top: 7px;">
+                    <div class="row">
+                        <div class="col-xs-5 col-xs-offset-5">
+                            <a href="#" title="Cedúla del cliente"><h4><i class="fa fa-clock-o success"></i> HISTORIAL DE GESTIÓNES</h4></a>
+                        </div>
+                                                    <div class="col-xs-3">
+                                <a href="#" class="dropdown-toggle btn btn-success accionAgregarGestion"  id="btnAgregarGestion" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                                    <i class="fa fa-plus"></i> GESTIONAR
+                                </a>
+                            </div>
+                                            </div>
+                    <div class="row" style="padding-top: 7px; font-size: 14px;">
+                        <div class="col-xs-12">
+                            <div id="divHistoricoGestion">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="success">
+                                            <th>Fecha</th>
+                                            <th>Gestor</th>
+                                            <th>Acción</th>
+                                            <th>Efecto</th>
+                                            <th>Contacto</th>
+                                            <th>Motivo No Pago</th>
+                                            <th>Fecha Acuerdo</th>
+                                            <th>Valor Acuerdo</th>
+                                            <th>Teléfono</th>
+                                            <th>Tipo Negociacíón</th>
+                                            <th>Obervaciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                                                                    <tr>
+                                                <td>2017-05-23 07:18:05</td>
+                                                <td>iordonez</td>
+                                                <td>Hacer Llamada</td>
+                                                <td>PROMESA</td>
+                                                <td>Titular</td>
+                                                <td></td>
+                                                <td>2017/05/26</td>
+                                                <td>106.586 	</td>
+                                                <td>3166284849</td>
+                                                <td></td>
+                                                <td>3166284849Contesta titular, indica realizar el pago el dia 26 de mayo por el valor de $106.586 	</td>
+                                            </tr>
+                                                                            </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="wrapper" class="active">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper" class="ventanaMovimiento">
+            <div class="container-fluid" style="padding-top: 10px;">
+                <div class="row" >
+                    <div class="col-xs-7 col-xs-offset-3">
+                        <a href="#" title="Cedúla del cliente" style="color:#FFFFFF; margin-top: 10px;"><h4><i class="fa fa-user success"></i> GESTIÓN</h4></a>
+                    </div>
+                </div>
+                <div class="row" style="display:none;" id="visualizacionObligacion">
+                    <div class="col-xs-7 col-xs-offset-2">
+                        <label class="label label-info" id="labelVisualizacionObligacion"></label>
+                    </div>
+                </div>
+                <br>
+                <form id="formularioGestion" action="javascript:void(0);">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1"><strong>Acción</strong></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-phone"></i></div>
+                                    <select class="form-control" id="accionGestion" name="accionGestion">
+                                        <option value="">..seleccione..</option>
+                                                                                    <option value="4">HACER LLAMADA</option>
+                                                                                    <option value="5">RECIBIR LLAMADA</option>
+                                                                            </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                    <label for="exampleInputEmail1"><strong>Contacto</strong></label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-male"></i></div>
+                                        <select class="form-control" id="contacto_gestion" name="contacto_gestion">
+                                            <option value="">..seleccione..</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            <div id="divEfectoGestion" style="display:none;">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><strong>Efecto</strong></label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-magic"></i></div>
+                                        <select class="form-control" id="efecto_gestion" name="efecto_gestion">
+                                            <option>..seleccione..</option>
+                                        </select>
+                                    </div>
+                                </div>                                
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><strong>Motivo No Pago</strong></label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-exclamation"></i></div>
+                                            <select class="form-control" id="motivo_gestion" name="motivo_gestion">
+                                                <option value="">..seleccione..</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1"><strong>Fecha Seguimiento</strong></label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                        <input type="text" readonly class="form-control fecha" name="fecha_seguimiento" value="">
+                                    </div>
+                                </div>
+                                <!--<div id="divAcuerdoGestion" style="display:none;">-->
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><strong>Valor Acuerdo</strong></label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-money"></i></div>
+                                            <input type="text" class="form-control" name="valor_acuerdo" value="">
+                                        </div>
+                                    </div>
+                                     <div class="form-group">
+                                        <label for="exampleInputEmail1"><strong>Fecha Acuerdo</strong></label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                            <input type="text" readonly class="form-control fecha" name="fecha_acuerdo" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><strong>Tipo Negociación</strong></label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-handshake-o"></i></div>
+                                            <select class="form-control" name="tipo_negociacion">
+                                                <option value="">..seleccione..</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                <!--</div>-->
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1"><strong>Observaciones</strong></label>
+                                <textarea name="obervaciones" id="observacionesGestion" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <div id="visualizacionTelefonos" class="success" style="display: none; text-align: center;">
+
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button type="button" class="btn btn-success btn-lg" id="autocompletar" title="Autocompletar"><i class="fa fa-magic"></i></button>
+                                <button type="submit" class="btn btn-success btn-lg" title="Guardar Gestión"><i class="fa fa-save"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="metodo" value="guardarGestion">
+                    <input type="hidden" name="origen_gestion" value="tarea">
+                    <input type="hidden" name="id_tarea" value="67">
+                    <input type="hidden" name="obligacion" id="obligacionGestion" value="">
+                    <input type="hidden" name="cedula_deudor" id="cedula_deudor" value="19495556">
+                    <input type="hidden" name="telefonos" id="telefonosGestion" value="">
+                    <input type="hidden" name="cartera" id="carteraGestion" value="4">
+                </form>
+            </div>
+        </div>
+    </div>

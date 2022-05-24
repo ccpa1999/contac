@@ -1,0 +1,1069 @@
+
+<?php
+include_once '../../config/consultas.php';
+
+/**
+ * Este Archivo y todos los contenidos en esta aplicación son propiedad
+ * exclusiva de Lavacascos SA, cualquier copia o reproducción del codigo 
+ * aquí contenido será tomada como una violación a los derechos de autor 
+ * de la marca anteriormente nombrada y será castigada y denunciada
+ * penalmente
+ * 
+ * @author Jonnathan Murcia <jjmurciab@gmail.com>
+ * @version 1.0
+ * @copyright (c) 2016, Lavacascos 
+ * */
+class modeloCarteras extends conexion {
+
+    var $productos;
+    var $cartera;
+    var $pivote;
+
+    public function __construct($datos = array())
+    {
+        $this->conexion();
+        $this->productos = Array();
+        $this->cartera = '';
+        $this->pivote = Array();
+        $this->consultas = new Consultas();
+    }
+
+    public function controlador($datos, $parametrosAdicionales = Array())
+    {
+        if (isset($datos['metodo'])) {
+            $resultado = $this->$datos['metodo']($datos, $parametrosAdicionales);
+        }
+
+        return $resultado;
+    }
+
+    /**
+     * Función que 
+     * @param type $datos
+     */
+    private function paginaInicio($datos)
+    {
+        $resultado = Array();
+        $resultado['cartera'] = $this->obtenerInformacionCartera($datos['cartera']);
+        $resultado['cliente'] = $this->obtenerInformacionClientes($datos['cartera']);
+        $resultado['gestion'] = $this->obtenerInformacionGestion($datos['cartera']);
+        $resultado['historial'] = $this->obtenerInformacionHistoricoGestion($resultado['cliente']['cliente'][0]['cedula'], $datos['cartera']);
+
+        return $resultado;
+    }
+
+    /**
+     * Función que obtiene la información de la cartera a la cual se está accesando
+     * 
+     * @param type $cartera incluye el id de la cartera que se seleccionó en el acceso
+     */
+    private function buscarDeudor($datos)
+    {
+        $resultado['cartera'] = $this->obtenerInformacionCartera($datos['cartera']);
+        $resultado['cliente'] = $this->obtenerInformacionClientesParametro($datos['cartera'], $datos['datoBusqueda'], $datos['tipo']);
+        $resultado['gestion'] = $this->obtenerInformacionGestion($datos['cartera']);
+        $resultado['historial'] = $this->obtenerInformacionHistoricoGestion($resultado['cliente']['cliente'][0]['cedula'], $datos['cartera']);
+
+        return $resultado;
+    }
+
+
+    /**
+     * Función que obtiene la información de la cartera a la cual se está accesando
+     * 
+     * @param type $cartera incluye el id de la cartera que se seleccionó en el acceso
+     */
+    private function buscarDeudorRecarga($datos)
+    {
+        $resultado['cartera'] = $this->obtenerInformacionCartera($datos['cartera']);
+        $resultado['cliente'] = $this->obtenerInformacionClientesParametro($datos['cartera'], $datos['datoBusqueda'], $datos['tipo']);
+        $resultado['gestion'] = $this->obtenerInformacionGestion($datos['cartera']);
+        $resultado['historial'] = $this->obtenerInformacionHistoricoGestion($resultado['cliente']['cliente'][0]['cedula'], $datos['cartera']);
+
+        return $resultado;
+    }
+
+    private function buscarDeudoresTarea($datos)
+    {   
+        $resultado['cartera'] = $this->obtenerInformacionCartera($datos['cartera']);
+        $deudor = $this->deudorLibreTarea($datos['tarea'], $datos['cartera']);
+        if(isset($deudor[0]['identificacion'])){
+            $resultado['cliente'] = $this->obtenerInformacionClientesParametro($datos['cartera'], $deudor[0]['identificacion'], 'cedula');
+        
+            $resultado['gestion'] = $this->obtenerInformacionGestion($datos['cartera']);
+            $resultado['historial'] = $this->obtenerInformacionHistoricoGestion($resultado['cliente']['cliente'][0]['cedula'], $datos['cartera']);
+        
+            $this->marcarDeudoresTarea($deudor[0]['identificacion'], $datos['tarea']);    
+        }
+        
+        return $resultado;
+    }
+
+    private function marcarDeudoresTarea($identificacion, $tarea)
+    {
+        $query = "UPDATE datos_tareas SET inicio_gestion = NOW(), usuario='".$_SESSION['usuario']."'
+        WHERE  identificacion = '$identificacion' AND id_tarea = '$tarea'";
+        $return = $this->ejecutar2($query);
+    }
+
+    private function deudorLibreTarea($tarea, $cartera)
+    {
+        $query = "SELECT identificacion FROM datos_tareas WHERE id_tarea = '$tarea'
+        AND cartera ='$cartera' AND usuario IN('', '".$_SESSION['usuario']."')  AND gestionado = '0' LIMIT 1";
+        $resultado = $this->row($query);
+
+        return $resultado;
+    }   
+
+    /**
+     * Función que obtiene la información de la cartera a la cual se está accesando
+     * 
+     * @param type $cartera incluye el id de la cartera que se seleccionó en el acceso
+     * º
+     */
+    private function obtenerInformacionCartera($cartera)
+    {
+        $query = "SELECT * FROM clientes WHERE id_cliente = '$cartera'";
+        $resultado = $this->row($query);
+
+        return $resultado;
+    }
+
+    /**
+     * Función que obtiene un cliente de la lista que se encuentre libre
+     * y regresa los datos de obligaciones y demográficos
+     * 
+     * @param String $cartera contiene la cartera de gestión actual
+     * @return Array $return regresa la información del cliente inicial
+     */
+    private function obtenerInformacionClientes($cartera)
+    {
+        $return = array();
+        $query = "SELECT d.cedula FROM deudores d, obligaciones o WHERE d.cedula = o.cedula_deudor "
+                . "AND o.cartera = '$cartera' AND d.estado = '1'";
+        $resultado = $this->row($query);
+        foreach ($resultado as $cliente) {
+            $query = "SELECT cedula_deudor FROM bloqueo_gestion WHERE cedula_deudor = '" . $cliente['cedula'] . "'"
+                    . " AND id_bloqueo = '1-$cartera'";
+            $resultadoquery = $this->row($query);
+            if (empty($resultadoquery)) {
+                $cedula = $cliente['cedula'];
+                break;
+            }
+        }
+
+        $query = "SELECT * FROM deudores WHERE cedula = '$cedula'";
+        $return['cliente'] = $this->row($query);
+        /* OBTENER OBLIGACIONES */
+        $query = "SELECT * FROM obligaciones WHERE cedula_deudor = '$cedula' AND estado = '1'";
+        $return['obligaciones'] = $this->row($query);
+        /* OBTENER DIRECCIONES */
+        $query = "SELECT * FROM direcciones WHERE cedula_deudor = '$cedula'";
+        $return['direcciones'] = $this->row($query);
+        /* OBTENER CORREOS */
+        $query = "SELECT * FROM correos WHERE cedula_deudor = '$cedula'";
+        $return['emails'] = $this->row($query);
+        /* OBTENER TELEFONOS */
+        $query = "SELECT * FROM telefonos WHERE cedula_deudor = '$cedula'";
+        $return['telefonos'] = $this->row($query);
+        
+
+        $this->marcarCliente($cartera, $cedula);
+        return $return;
+    }
+
+    /**
+     * Función que valida el tipo de dato y consulta de acuerdo al criterio de busqueda
+     * 
+     * @param String $cartera contiente la cartera en la que se van a consultar
+     * @param String $parametro
+     * @param String $tipo
+     * @return Array 
+     */
+    private function obtenerInformacionClientesParametro($cartera, $parametro, $tipo)
+    {
+        $return = array();
+        switch ($tipo) {
+            case 'cedula':
+                $query = "SELECT cedula as cedula_deudor FROM deudores WHERE cedula LIKE '%$parametro%'";
+                break;
+            case 'numero_obligacion':
+                $query = "SELECT cedula_deudor FROM obligaciones WHERE numero_obligacion = '$parametro'";
+                break;
+            case 'telefono':
+                $query = "SELECT cedula_deudor FROM telefonos WHERE telefono = '$parametro'";
+                break;
+        }
+
+        $cedula = $this->row($query);
+        $cedula = $cedula[0]['cedula_deudor'];
+        if ($cedula != '') {
+            $query = "SELECT * FROM deudores WHERE cedula = '$cedula'";
+            $return['cliente'] = $this->row($query);
+            /* OBTENER OBLIGACIONES */
+            $query = "SELECT * FROM obligaciones WHERE cedula_deudor = '$cedula' AND estado = '1'";
+            $return['obligaciones'] = $this->row($query);
+            /* OBTENER DIRECCIONES */
+            $query = "SELECT * FROM direcciones WHERE cedula_deudor = '$cedula'";
+            $return['direcciones'] = $this->row($query);
+             /* OBTENER CORREOS */
+            $query = "SELECT * FROM correos WHERE cedula_deudor = '$cedula' AND estado = '1'";
+            $return['emails'] = $this->row($query);
+            /* OBTENER TELEFONOS */
+            $query = "SELECT * FROM telefonos WHERE cedula_deudor = '$cedula'";
+            $return['telefonos'] = $this->row($query);
+        }
+
+        return $return;
+    }
+
+    /**
+     * Función que obtiene toda la información para llenar los campos de la
+     * ventana de gestión
+     * 
+     * @param String $cartera contiene la cartera de gestión actual
+     * @return Array $return Contiene toda la información requerida para la gestión
+     */
+    private function obtenerInformacionGestion($cartera)
+    {
+        /* Obtener las acciones */
+        $return = Array();
+        $query = "SELECT h.* FROM accion a, homologado_accion h WHERE a.estado = '1'
+        AND h.id_accion = a.id AND  h.id_cliente = '$cartera'";
+        $return['acciones'] = $this->row($query);
+        /* Obtener los tipos de contacto */
+        $query = "SELECT h.* FROM contacto c, homologado_contacto h WHERE c.estado = '1'    
+        AND h.id_contacto = c.id AND h.id_cliente = '$cartera'";
+        $return['contacto'] = $this->row($query);
+        /* Obtener los */
+        $query = "SELECT h.* FROM efecto e, homologado_efecto h WHERE e.estado = '1' 
+        AND h.id_efecto = e.id AND h.id_cliente = '$cartera'";
+        $return['motivo_no_pago'] = $this->row($query);
+
+        return $return;
+    }
+
+    /**
+     * Función que obtiene toda la información para llenar los campos de la
+     * ventana de gestión
+     * 
+     * @param String $cartera contiene la cartera de gestión actual
+     * @return Array $return Contiene toda la información requerida para la gestión
+     */
+    private function obtenerInformacionHistoricoGestion($cedula, $cartera)
+    {
+        $query = "SELECT h.id, h.fecha_gestion, h.gestor, h.cedula_deudor, h.obligacion, h.fecha_seguimiento, 
+                h.valor_acuerdo, h.fecha_acuerdo, h.motivo_no_pago, h.telefono, h.tipo_negociacion, h.actividad_economica, 
+                 h.observaciones, a.homologado as accion, e.homologado as efecto, c.homologado as contacto
+                FROM homologado_accion a, homologado_efecto e,  
+                homologado_contacto c, historico_gestion h 
+                WHERE h.cedula_deudor = '$cedula'  
+                AND h.cliente_id = '$cartera' 
+                AND h.accion = a.id     
+                AND h.efecto = e.id 
+                AND h.contacto = c.id  
+                ORDER by fecha_gestion DESC"; 
+        $return = $this->row($query); 
+        foreach ($return as $key => $value) {
+            $query = "SELECT motivo FROM motivos_no_pago WHERE id = '".$value['motivo_no_pago']."'";
+            $result = $this->row($query);
+            $return[$key]['motivo_no_pago'] = (isset($result[0]['motivo']) == 'true') ? $result[0]['motivo'] : '';
+        }
+
+        return $return;
+    }
+
+    /**
+     * Función que realiza la marca del cliente para que el mismo no pueda
+     * ser gestionado por dos agentes al tiempo
+     * 
+     * @param String $cartera contiene la cartera de gestión actual
+     * @param String $cedula Contiene la cedula del deudor
+     */ 
+    private function obtenerContactosAccion($datos)
+    {
+        $query = "SELECT c.homologado, c.id FROM homologado_contacto c, arbol_contacto a " 
+                . "WHERE a.id_accion = '" . $datos['accion'] . "' AND a.id_contacto = c.id"; 
+                
+
+        $return = $this->row($query);
+        return $return;
+    }
+
+    /**
+     * Función que realiza la marca del cliente para que el mismo no pueda
+     * ser gestionado por dos agentes al tiempo
+     * 
+     * @param String $cartera contiene la cartera de gestión actual
+     * @param String $cedula Contiene la cedula del deudor
+     */
+    private function obtenerEfectosContacto($datos)
+    {
+         $query = "SELECT e.homologado, e.id FROM homologado_efecto e, arbol_efecto a "
+                . "WHERE a.id_contacto = '" . $datos['contacto'] . "' AND a.id_efecto = e.id 
+                AND a.id_cliente = '".$datos['cartera']."'";
+
+        $return['efectos'] = $this->row($query);
+
+        $query = "SELECT m.motivo, m.id FROM motivos_no_pago m, arbol_motivos_no_pago a "
+                . "WHERE a.id_contacto = '" . $datos['contacto'] . "' AND a.id_motivo_no_pago = m.id 
+                AND a.id_cliente = '".$datos['cartera']."'";
+
+        $return['motivos'] = $this->row($query);
+
+        return $return;
+    }
+
+    /**
+     * Función que realiza la marca del cliente para que el mismo no pueda
+     * ser gestionado por dos agentes al tiempo
+     * 
+     * @param String $cartera contiene la cartera de gestión actual
+     * @param String $cedula Contiene la cedula del deudor
+     */
+    private function marcarCliente($cartera, $cedula)
+    {
+        $query = "INSERT INTO bloqueo_gestion (id_bloqueo, cedula_deudor) "
+                . "VALUES('1-$cartera', '$cedula')";
+        $this->ejecutar2($query);
+    }
+
+    /**
+     * 
+     * @param type $datos
+     * @return type
+     */
+    private function cargarAsignacion($datos)
+    {
+        
+        $cartera = $datos['cartera'];
+        $return = array('mensaje' => '', 'resultado' => '');
+        
+
+        $return = $this->cargaAsignacionUpdate($datos);
+
+        return json_encode($return);
+    }
+
+    /**
+     * Función que realiza la carga de la asignación tratando de mejorar el rendimiento de la carga de la misma
+     * 
+     * @param String $cartera contiene la cartera de gestión actual
+     * @param String $cedula Contiene la cedula del deudor
+     */
+    private function cargaAsignacionUpdate($datos)
+    {
+        $cartera = $datos['cartera'];
+        $file_type = $_FILES['archivo']['type'];
+        $handle = fopen($datos['ruta'], "r");
+        $resultado = array();
+        $i = 0;
+        $query = "";
+        $queryTmp = $this->consultas->consultas();
+        $query .= $queryTmp['tabla_asignacion'];
+
+        while (($datos = fgetcsv($handle, 1000, ";")) !== FALSE) {
+            $query .= "INSERT INTO tmp (campo1, campo2, campo3, campo4, campo5, campo6, campo7, 
+            campo8, campo9, campo10, campo11, campo12, campo13, campo14, campo15, campo16, campo17, 
+            campo18, campo19, campo20, campo21, campo22, campo23, campo24, campo25, campo26, campo27, 
+            campo28, campo29, campo30, campo31, campo32, campo33, campo34, campo35, campo36, campo37,  
+            campo38, campo39, campo40, campo41, campo42, campo43, campo44, campo45, campo46, campo47,  
+            campo48, campo49, campo50, campo51, campo52, campo53, campo54, campo55, campo56, campo57, 
+            campo58, campo59, campo60, campo61, campo62, campo63, campo64, campo65, campo66, campo67,
+            campo68, campo69) 
+            VALUES (   '$datos[0]', $cartera, '$datos[1]', '$datos[2]', '$datos[3]', '$datos[4]', '$datos[5]', '$datos[6]',"
+                    . "'$datos[7]', '$datos[8]', '$datos[9]', '$datos[10]', '$datos[11]', '$datos[12]', '$datos[13]', "
+                    . "'$datos[14]', '$datos[15]', '$datos[16]', '$datos[17]', '$datos[18]', '$datos[19]', '$datos[20]', "
+                    . "'$datos[21]', '$datos[22]', '$datos[23]', '$datos[24]', '$datos[25]', '$datos[26]', '$datos[27]', "
+                    . "'$datos[28]', '$datos[29]', '$datos[30]', '$datos[31]', '$datos[32]', '$datos[33]', '$datos[34]', "
+                    . "'$datos[35]', '$datos[36]', '$datos[37]', '$datos[38]', '$datos[39]', '$datos[40]', '$datos[41]', "
+                    . "'$datos[42]', '$datos[43]', '$datos[44]', '$datos[45]', '$datos[46]', '$datos[47]', '$datos[48]', "
+                    . "'$datos[49]', '$datos[50]', '$datos[51]', '$datos[52]', '$datos[53]', '$datos[54]', '$datos[55]', " 
+                    . "'$datos[56]', '$datos[57]', '$datos[58]', '$datos[59]', '$datos[60]', '$datos[61]', '$datos[62]', "
+                    . "'$datos[63]', '$datos[64]', '$datos[65]', '$datos[66]', '$datos[81]'); ";
+            $i++;
+        }
+
+        fclose($handle);
+        $query .= "INSERT INTO deudores (nombre, cedula, estado) ".
+                 "SELECT campo7, campo1, '1' FROM tmp ON DUPLICATE KEY 
+                  UPDATE estado = '1';";
+
+        $query .= "INSERT INTO obligaciones (cedula_deudor, cartera, producto, numero_obligacion, entidad, "
+                    . "regional, estrategia_inicial, estrategia_actual, obligaciones, ultimo_efecto, valor_actual_inicial, "
+                    . "valor_maximo, fecha_apertura, plazo, dia_facturacion, modalidad, franja_actual, estado_reparto, "
+                    . "user_id, mono_multi, nueva_marca_foco, estapa_proceso_juridico, codigo_garantia, fecha_ultimo_alivio, "
+                    . "estado_ciclo, estado_obligacion, codigo_recuperacion, fecha_actualizacion_inicial, "
+                    . "fecha_actualizacion, dias_mora_inicial, dias_mora_actual, fecha_pago, saldo_capital_inicial, "
+                    . "saldo_capital, interes_sobre_saldo, saldo_total, valor_cuota, capital_mora, intereses_mora, "
+                    . "cargo_cobranzas, cantidad_disputada, saldo_mora, pagos_mes_cliente, pagos_por_obligacion, "
+                    . "fecha_ultimo_pago, ciclo_mora_inicial_obligacion, ciclo_mora_actual_sistema, porcentaje_gac, "
+                    . "pago_fianza, fecha_seguro, valor_seguro, valor_provisionado, otros_cargos, zona, saldo_expuesto, estado) "
+                    . "SELECT campo1, campo2, campo3, campo4, campo5, campo6, "
+                    . "campo8, campo9, campo10, campo11, campo12, campo13, campo14, "
+                    . "campo15, campo16, campo17, campo18, campo19, campo20, campo21, "
+                    . "campo22, campo23, campo24, campo25, campo26, campo27, campo28, "
+                    . "campo29, campo30, campo31, campo32, campo33, campo34, campo35, "
+                    . "campo36, campo37, campo38, campo39, campo40, campo41, campo42, "
+                    . "campo43, campo44, campo45, campo46, campo47, campo48, campo49, "
+                    . "campo50, campo51, campo52, campo53, campo54, campo55, campo69, '1' FROM tmp "
+                    . "ON DUPLICATE KEY "
+                    . "UPDATE estado = '1', entidad = campo5, regional = campo6, estrategia_inicial = campo8,
+                       estrategia_actual = campo9, obligaciones = campo10, ultimo_efecto = campo11, 
+                       valor_actual_inicial = campo12, valor_maximo = campo13, fecha_apertura = campo14,   
+                       plazo = campo15, dia_facturacion = campo16, modalidad = campo17, franja_actual = campo18, 
+                       estado_reparto = campo19, user_id = campo20, mono_multi = campo21, 
+                       nueva_marca_foco = campo22, estapa_proceso_juridico = campo23, codigo_garantia = campo24, 
+                       fecha_ultimo_alivio = campo25, estado_ciclo = campo26, estado_obligacion = campo27, 
+                       codigo_recuperacion = campo28, fecha_actualizacion_inicial = campo29, 
+                       fecha_actualizacion = campo30, dias_mora_inicial = campo31, dias_mora_actual = campo32, 
+                       fecha_pago = campo33, saldo_capital_inicial = campo34, saldo_capital = campo35, 
+                       interes_sobre_saldo = campo36,  saldo_total = campo37, valor_cuota = campo38, 
+                       capital_mora = campo39, intereses_mora = campo40, cargo_cobranzas = campo41, 
+                       cantidad_disputada = campo42, saldo_mora = campo43, pagos_mes_cliente = campo44, 
+                       pagos_por_obligacion = campo45, fecha_ultimo_pago = campo46, 
+                       ciclo_mora_inicial_obligacion = campo47, ciclo_mora_actual_sistema = campo48, 
+                       porcentaje_gac = campo49, pago_fianza = campo50, fecha_seguro = campo51, 
+                       valor_seguro = campo53, valor_provisionado = campo53, 
+                       otros_cargos = campo54, zona = campo55, saldo_expuesto = campo69;";
+
+
+        $query .= "INSERT INTO direcciones (cedula_deudor, tipo_direccion, ciudad, direccion, estado) "
+                    . "SELECT campo1, '', campo56, campo57, '1' FROM tmp WHERE campo57 != '' ON DUPLICATE KEY "
+                    . "UPDATE estado = '1';";
+
+        $query .= "INSERT INTO correos (cedula_deudor, tipo_correo, correo, estado) "
+                    . "SELECT campo1, '', campo61, '1' FROM tmp WHERE campo61 != '' ON DUPLICATE KEY "
+                    . "UPDATE estado = '1';";            
+        for ($i = 62; $i <= 67; $i++) {
+                switch ($i) {
+                    case 62: $tipo = 'celular';
+                            break;
+                    case 63: $tipo = 'teléfono residencia';
+                            break;
+                    case 64: $tipo = 'celular oficina';
+                            break;
+                    case 65: $tipo = 'teléfono oficina';
+                            break;
+                    case 66: $tipo = 'otro celular';
+                            break;
+                    case 67: $tipo = 'otro teléfono';
+                            break;
+                    }
+                    $query .= "INSERT INTO telefonos (cedula_deudor, tipo_telefono, telefono, estado) "
+                            . "SELECT campo1, '" . utf8_decode($tipo) . "', campo".$i.", '1' FROM tmp 
+                               WHERE campo".$i." != '' ON DUPLICATE KEY "
+                            . "UPDATE estado = '1';";
+            }                        
+
+        $return = $this->ejecutar3($query);  
+
+        /*$temp = $this->ejecutar2($query);*/ 
+
+    }
+
+     /**
+     * Función que obtiene los datos insertados en la tabla pivot de acuerdo a la cartera
+     * en la cual fueron cargados
+     * 
+     * @param String $cartera contiene la cartera de gestión actual
+     * @return Array $resultado Contiene los datos obtenidos por la consulta
+     */
+    private function obtenerDatosPivote($cartera)
+    {
+        $query = "SELECT * FROM pivote WHERE cartera = '$cartera'";
+        $resultado = $this->row($query);
+        foreach ($resultado as $key => $registro) {
+            $datos = explode(";", $registro['informacion']);
+            $resultado[$key]['informacion'] = $datos;
+        }
+        return $resultado;
+    }
+
+    /**
+     * Función que inserta los deudores 
+     */
+    private function insertarDeudores($cartera, $resultado)
+    {
+        $suma = 0;
+        $return = Array('deudores' => 0, 'obligaciones' => 0, 'demograficos' => array('telefonos' => 0,
+            'direcciones' => 0), 'pagos' => 0);
+        $query = "UPDATE obligaciones SET estado = '0' WHERE cartera = '$cartera'";
+        $this->ejecutar2($query);
+        foreach ($resultado as $registro) {
+            $identificacion = $registro['identificacion'];
+            $nombre = $registro['informacion'][5];
+            $query = "INSERT INTO deudores (nombre, cedula, estado) "
+                    . "VALUES ('$nombre', '$identificacion', '1') ON DUPLICATE KEY "
+                    . "UPDATE estado = '1'";    
+            $temp = $this->ejecutar2($query);
+            $return['deudores'] = ($temp >= 1) ? ($return['deudores'] + $temp) : $return['deudores'];
+            /*************OBLIGACIONES***************/
+            $obligaciones = $this->insertarObligaciones($cartera, $registro);
+            $return['obligaciones'] = $obligaciones + $return['obligaciones'];
+            /*************DEMOGRAFICOS***************/
+            $demograficos = $this->insertarDemograficos($registro);
+            $return['demograficos']['direcciones'] = $demograficos['direcciones'] +  $return['demograficos']['direcciones'];
+            $return['demograficos']['telefonos'] = $demograficos['telefonos'] + $return['demograficos']['telefonos'];
+            /*************PAGOS***************/
+            $pagos = $this->insertarPagos($registro);
+            $return['pagos'] = $pagos + $return['pagos'];
+        }
+        return $return;
+    }
+
+    /**
+     * Función que inserta los deudores 
+     */
+    private function insertarObligaciones($cartera, $registro)
+    {
+        $return = 0;
+        $identificacion = $registro['identificacion'];
+        $datos = $registro['informacion'];
+        $nombre = $registro['informacion'][5];
+        $query = "INSERT INTO obligaciones (cedula_deudor, cartera, producto, numero_obligacion, entidad, "
+                    . "regional, estrategia_inicial, estrategia_actual, obligaciones, ultimo_efecto, valor_actual_inicial, "
+                    . "valor_maximo, fecha_apertura, plazo, dia_facturacion, modalidad, franja_actual, estado_reparto, "
+                    . "user_id, mono_multi, nueva_marca_foco, estapa_proceso_juridico, codigo_garantia, fecha_ultimo_alivio, "
+                    . "estado_ciclo, estado_obligacion, codigo_recuperacion, fecha_actualizacion_inicial, "
+                    . "fecha_actualizacion, dias_mora_inicial, dias_mora_actual, fecha_pago, saldo_capital_inicial, "
+                    . "saldo_capital, interes_sobre_saldo, saldo_total, valor_cuota, capital_mora, intereses_mora, "
+                    . "cargo_cobranzas, cantidad_disputada, saldo_mora, pagos_mes_cliente, pagos_por_obligacion, "
+                    . "fecha_ultimo_pago, ciclo_mora_inicial_obligacion, ciclo_mora_actual_sistema, porcentaje_gac, "
+                    . "pago_fianza, fecha_seguro, valor_seguro, valor_provisionado, otros_cargos, zona, estado) "
+                    . "VALUES ('$identificacion', '$cartera', '$datos[1]', '$datos[2]', '$datos[3]', '$datos[4]', '$datos[6]',"
+                    . "'$datos[7]', '$datos[8]', '$datos[9]', '$datos[10]', '$datos[11]', '$datos[12]', '$datos[13]', "
+                    . "'$datos[14]', '$datos[15]', '$datos[16]', '$datos[17]', '$datos[18]', '$datos[19]', '$datos[20]', "
+                    . "'$datos[21]', '$datos[22]', '$datos[23]', '$datos[24]', '$datos[25]', '$datos[26]', '$datos[27]', "
+                    . "'$datos[28]', '$datos[29]', '$datos[30]', '$datos[31]', '$datos[32]', '$datos[33]', '$datos[34]', "
+                    . "'$datos[35]', '$datos[36]', '$datos[37]', '$datos[38]', '$datos[39]', '$datos[40]', '$datos[41]', "
+                    . "'$datos[42]', '$datos[43]', '$datos[44]', '$datos[45]', '$datos[46]', '$datos[47]', '$datos[48]', "
+                    . "'$datos[49]', '$datos[50]', '$datos[51]', '$datos[52]', '$datos[53]', '1') "
+                    . "ON DUPLICATE KEY "
+                    . "UPDATE estado = '1'";
+
+        $temp = $this->ejecutar2($query);
+        $return = ($temp >= 1) ? ($return + $temp) : $return;
+        
+        return $return;
+    }
+
+    /**
+     * Función que inserta los deudores 
+     */
+    private function insertarDemograficos($registro)
+    {
+        $return = array('direcciones' => 0, 'telefonos' => 0);
+        $datos = $registro['informacion'];
+        $identificacion = $registro['identificacion'];
+        if ($datos[55] != '') {
+            $query = "INSERT INTO direcciones (cedula_deudor, tipo_direccion, ciudad, direccion, estado) "
+                        . "VALUES ('$identificacion', '', '$datos[54]', '$datos[55]', '1') ON DUPLICATE KEY "
+                        . "UPDATE estado = '1'";
+            $temp = $this->ejecutar2($query);
+            $return['direcciones'] = ($temp >= 1) ? ($return['direcciones'] + $temp) : $return['direcciones'];
+        }
+        for ($i = 60; $i <= 65; $i++) {
+            if ($datos[$i] != '') {
+                switch ($i) {
+                    case 60: $tipo = 'celular';
+                            break;
+                    case 61: $tipo = 'teléfono residencia';
+                            break;
+                    case 62: $tipo = 'celular oficina';
+                            break;
+                    case 63: $tipo = 'teléfono oficina';
+                            break;
+                    case 64: $tipo = 'otro celular';
+                            break;
+                    case 65: $tipo = 'otro teléfono';
+                            break;
+                    }
+                    $query = "INSERT INTO telefonos (cedula_deudor, tipo_telefono, telefono, estado) "
+                            . "VALUES ('$identificacion', '" . utf8_decode($tipo) . "', '$datos[$i]', '1') ON DUPLICATE KEY "
+                            . "UPDATE estado = '1'";
+                    $temp1 = $this->ejecutar2($query);
+                    $return['telefonos'] = ($temp1 >= 1) ? ($return['telefonos'] + $temp1) : $return['telefonos'];
+                }
+            }
+        
+        return $return;
+    }
+
+    /**
+     * Función que inserta los deudores 
+     */
+    private function insertarPagos($registro)
+    {
+        $return = 0;
+        $datos = $registro['informacion'];
+        $identificacion = $registro['identificacion'];
+        if (!empty($datos[32])) {
+            $query = "INSERT INTO pagos (cedula_deudor, obligacion, valor_pago, fecha_pago) "
+                        . "VALUES ('$identificacion', '$datos[2]', '$datos[32]', '$datos[31]') ";
+            $temp = $this->ejecutar2($query);
+            $return = ($temp >= 1) ? ($return + $temp) : $return;
+        }
+        
+        return $return;
+    }
+
+    private function vaciarPivote($cartera)
+    {
+        $query = "DELETE FROM pivote WHERE cartera = '$cartera'";
+        $this->ejecutar2($query);
+    }
+
+    /**
+     * Función que retorna mensaje para div de mensajes
+     * @param type $resultado
+     * @return String $mensajeFinal, contiene 
+     */
+    private function mensaje($mensajes)
+    {
+        $mensajeFinal = '';
+        foreach ($mensajes as $mensaje) {
+            $mensajeFinal = $mensajeFinal . $mensaje . "<br>";
+        }
+
+        return $mensajeFinal;
+    }
+
+    /**
+     * Función que realiza el cargue de las tareas respectivas de cada cartera
+     * 
+     * @param type $datos
+     */
+    private function cargarTarea($datos)
+    {
+        $cartera = $datos['cartera'];
+        $return = array('mensaje' => '', 'resultado' => '');
+        $cont = 0;
+        $file_type = $_FILES['archivo']['type'];
+        $handle = fopen($datos['ruta'], "r");
+        $resultado = array();
+        $i = 0;
+
+        $query = "INSERT INTO tareas(nombre_tarea, cartera, tipo_tarea)
+                      VALUES('".$datos['datos']['nombre_tarea']."', '$cartera', '".$datos['datos']['tipo_tarea']."')";
+                      
+        $id = $this->obtenerId($query);    
+        while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+            switch ($datos['datos']['tipo_tarea']) {
+                case 'activa':
+                    $nombre_tarea = $data[0];
+                    $asesor = '';
+                    $identificacion = $data[1];
+                    $asesor = '';
+                    break;
+                case 'asesor':
+                    $nombre_tarea = '';
+                    $asesor = $data[1];
+                    $identificacion = $data[0];
+                    $asesor = $data[0];
+                    break;
+                case 'libre':
+                    $nombre_tarea = $data[0];
+                    $asesor = '';
+                    $identificacion = $data[1];
+                    $asesor = '';
+                    break;
+            }
+            $query = "INSERT INTO datos_tareas (id_tarea, identificacion, usuario, tipo_tarea, cartera, gestionado) "
+                    . "VALUES ('$id', '$identificacion', '$asesor', '" . $datos['datos']['tipo_tarea'] . "',"
+                    . " '$cartera', '0') ON DUPLICATE KEY UPDATE gestionado = '0'";
+            $temp = $this->ejecutar2($query);
+            $cont = ($temp >= 1) ? ($cont + $temp) : $cont;
+            $i++;
+        }
+        fclose($handle);
+        $mensaje = 'Se insertaron ' . $cont . ' registros en Tareas';
+        $return['mensaje'] = $mensaje;
+        $return['resultado'] = ($cont >= 1) ? 'ok' : 'fallo';
+        return json_encode($return);
+    }
+
+    /**
+     * Función que se encarga de guarda la gestión en cada una de las campañas
+     * @param type $datos
+     */
+    private function guardarGestion($datos)
+    {
+        session_start();
+        $telefonos = substr($datos['telefonos'], 0, -1);
+        $telefonos = explode(",", $telefonos);
+        /*$accion = "SELECT homologado FROM homologado_accion WHERE id = '" . $datos['accionGestion'] . "'";
+        $accion = $this->row($accion);
+        $efecto = "SELECT homologado FROM homologado_efecto WHERE id = '" . $datos['efecto_gestion'] . "'";
+        $efecto = $this->row($efecto);
+        $contacto = "SELECT homologado FROM homologado_contacto WHERE id = '" . $datos['contacto_gestion'] . "'";
+        $contacto = $this->row($contacto);
+        $motivo = "SELECT motivo FROM motivos_no_pago WHERE id = '" . $datos['motivo_gestion'] . "'";
+        $motivo = $this->row($motivo);*/
+
+        foreach ($telefonos as $telefono) {
+            $query = "INSERT INTO historico_gestion (fecha_gestion, gestor, cedula_deudor, obligacion, accion, efecto, contacto, motivo_no_pago, "
+                    . "fecha_seguimiento, valor_acuerdo, fecha_acuerdo, telefono, tipo_negociacion, observaciones, origen_gestion, cliente_id) "
+                    . "VALUES (NOW(), '" . $_SESSION['usuario'] . "', '" . $datos['cedula_deudor'] . "', "
+                    . "'" . $datos['obligacion'] . "', '" . $datos['accionGestion'] . "', "
+                    . "'" . $datos['efecto_gestion'] . "', '" . $datos['contacto_gestion']  . "', '" . $datos['motivo_gestion']. "', "
+                    . "'" . $datos['fecha_seguimiento'] . "', '" . $datos['valor_acuerdo'] . "', '" . $datos['fecha_acuerdo'] . "', '" . $telefono . "', '" . $datos['tipo_negociacion'] . "', "
+                    . "'" . utf8_decode($datos['obervaciones']) . "', '" . $datos['origen_gestion'] . "', 
+                    '" . $datos['cartera'] . "')";      
+            $resultado = $this->ejecutar2($query);
+        }
+
+        if($datos['origen_gestion'] == 'tarea'){
+             $query  = "UPDATE datos_tareas SET gestionado = '1', fin_gestion = NOW() 
+                        WHERE id_tarea = '".$datos['id_tarea']."' 
+                        AND identificacion = '".$datos['cedula_deudor']."'";
+             $this->ejecutar2($query);           
+        }
+
+        return $resultado;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    private function autocompletar($datos)
+    {
+        parse_str($datos['datos'], $formulario);
+        $query = "SELECT guion FROM guiones_gestion WHERE id_efecto = '" . $formulario['efecto_gestion'] . "'";
+        $resultado = $this->row($query);
+        return $resultado;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     * @return type
+     */
+    private function refrescarHistorico($datos)
+    {
+        $datos = $this->obtenerInformacionHistoricoGestion($datos['cedula_deudor'], $datos['cartera']);
+        return $datos;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    private function administracionTareas($datos)
+    {
+        $query = "SELECT id, nombre_tarea, tipo_tarea FROM tareas WHERE cartera = '" . $datos['cartera'] . "'";
+        $resultado = $this->row($query);
+        return $resultado;
+    }
+
+    /**
+     * 
+     * @param type $datos
+     */
+    private function consultarTareas($datos)
+    {
+        $query = "SELECT id, nombre_tarea FROM tareas WHERE cartera = '" . $datos['cartera'] . "' "
+                . "AND tipo_tarea IN ('libre', 'asesor') AND terminada = '0'";
+        $resultado = $this->row($query);
+        return $resultado;
+    }
+
+    /**
+    * Función que obtiene y retorna los datos requeridos de acuerdo al tipo de informe   
+    * @param Type array: $datos
+    **/
+    private function generarInforme($datos)
+    {
+        switch ($datos['informe']) {
+            case 'gestion':
+                $resultado = $this->informeGestion($datos);
+                break;
+
+            case 'productividad':
+                $resultado = $this->informeProductividad($datos);
+                break;                
+            default:
+                # code...
+                break;
+        }
+
+        /*
+        $resultado = array();
+        $respuesta = $this->consultasInformes($datos);
+        $resultado['cabeceras'] = $respuesta['cabeceras'];
+        $resultado['resultado'] = $this->row($respuesta['query']);*/
+        return $resultado;
+    }
+
+    /**
+    * Función que obtiene y retorna los datos requeridos de acuerdo al tipo de informe   
+    * @param Type array: $tipo
+    * @return type string: $query: contiene la consulta solicitada de acuerdo al tipo de informe    
+    **/
+    private function informeGestion($datos){
+        $query = "SELECT h.*, a.homologado as accion_homologado, e.homologado as efecto_homologado, c.homologado as contacto_homologado FROM historico_gestion h, homologado_accion a, homologado_efecto e, homologado_contacto c 
+                WHERE h.fecha_gestion BETWEEN '".$datos['fecha_inicial']." 00:00:00'
+                AND '".$datos['fecha_final']." 23:59:59' AND h.cliente_id = '".$datos['cartera']."'
+                AND h.accion = a.id AND h.efecto = e.id AND h.contacto = c.id";
+        $resultado = $this->row($query);
+        foreach ($resultado as $key => $value) {
+            $query = "SELECT motivo FROM motivos_no_pago WHERE id = '".$value['motivo_no_pago']."'";
+            $result = $this->row($query);
+            $return[$key]['motivo_no_pago'] = (isset($result[0]['motivo']) == 'true') ? $result[0]['motivo'] : '';
+        }
+        
+        $cabeceras = array('Identificacion', 'Obligacion', 'Fecha Gestion',
+                'Hora Gestion', 'Accion', 'Efecto', 'Contacto', 'Motivo No Pago',  
+                'Actividad Economica', 'Fecha Promesa', 'Valor', 'Tipo Acuerdo',
+                'Telefono', 'Seguimiento', 'Observaciones', 'Gestor');
+
+        $fp = fopen('../../public/archivos/descargas/'.$datos['cartera'].'/informe_'.$datos['informe'].' '.date("Y-m-d").'.xls', 'w');
+        header('Content-Type: text/html; charset=UTF-8');
+        fputcsv($fp, $cabeceras);
+        foreach ($resultado as $campos) {
+            $fechas = explode(' ', $campos['fecha_gestion']);
+            $array['identificacion'] = $campos['cedula_deudor'];
+            $array['obligacion'] = $campos['obligacion'];   
+            $array['fecha_gestion'] = $fechas[0];
+            $array['hora_gestion'] = $fechas[1];
+            $array['accion'] = utf8_decode(utf8_encode($campos['accion_homologado']));
+            $array['efecto'] = utf8_decode(utf8_encode($campos['efecto_homologado']));
+            $array['contacto'] = utf8_decode(utf8_encode($campos['contacto_homologado']));
+            $array['motivo_no_pago'] = utf8_decode(utf8_encode($campos['motivo_no_pago']));
+            $array['actividad_economica'] = utf8_decode(utf8_encode($campos['actividad_economica']));
+            $array['fecha_promesa'] = '';
+            $array['valor'] = $campos['valor_acuerdo'];
+            $array['tipo_acuerdo'] = $campos['tipo_negociacion'];
+            $array['telefono'] = $campos['telefono'];
+            $array['seguimiento'] = $campos['fecha_seguimiento'];
+            $array['Observaciones'] = $campos['observaciones'];
+            $array['Gestor'] = $campos['gestor'];
+            
+            fputcsv($fp, $array);
+        }
+
+        fclose($fp);
+        $retorno = (count($resultado) >= 1)? 'ok': 'fallo';             
+        return $retorno;
+    }
+
+    /**
+    * Función que obtiene y retorna los datos requeridos de acuerdo al tipo de informe   
+    * @param Type array: $tipo
+    * @return type string: $query: contiene la consulta solicitada de acuerdo al tipo de informe    
+    **/
+    private function informeProductividad($datos)
+    {
+        
+        $query = "SELECT gestor FROM historico_gestion WHERE cliente_id = '".$datos['cartera']."' AND fecha_gestion BETWEEN '".$datos['fecha_inicial']." 00:00:00'  
+                AND '".$datos['fecha_final']." 23:59:59'  
+                GROUP BY gestor";
+        $gestores = $this->row($query);
+
+        $query = "SELECT id FROM homologado_contacto WHERE id_contacto = '4' AND id_cliente = '".$datos['cartera']."'";
+        $contactos = "";
+        file_put_contents("contactos.json", $query);
+        $resultante = $this->row($query);
+        foreach ($resultante as $contacto) {
+            $contactos = $contactos."'".$contacto['id']."', ";
+        }
+
+        $query = "SELECT id FROM homologado_efecto WHERE id_efecto = '108' AND id_cliente = '".$datos['cartera']."'";
+        file_put_contents("promesas.json", $query);
+        $resultante = $this->row($query);
+        $promesas = "";
+        foreach ($resultante as $promesa) {
+            $promesas = $promesas."'".$promesa['id']."', ";
+        }
+
+        $query = "SELECT id FROM homologado_efecto WHERE id_efecto = '106' AND id_cliente = '".$datos['cartera']."'";
+        file_put_contents("posibles.json", $query);
+        $posibles = "";
+        $resultante = $this->row($query);
+        foreach ($resultante as $posible) {
+            $posibles = $posibles."'".$posible['id']."', ";
+        }
+        
+        $resultado = array();
+        foreach ($gestores as $gestor) {
+            $array = array();
+            $query ="SELECT COUNT(efecto) as clientes FROM historico_gestion WHERE gestor = '".$gestor['gestor']."' AND fecha_gestion BETWEEN '".$datos['fecha_inicial']." 00:00:00'
+                AND '".$datos['fecha_final']." 23:59:59' GROUP BY cedula_deudor";   
+            $array['clientes'] = $this->row($query);
+
+            $query ="SELECT COUNT(efecto) as gestiones FROM historico_gestion WHERE gestor = '".$gestor['gestor']."' AND fecha_gestion BETWEEN '".$datos['fecha_inicial']." 00:00:00'
+                AND '".$datos['fecha_final']." 23:59:59'";
+            $array['gestiones'] = $this->row($query);
+
+            $query ="SELECT COUNT(efecto) as promesas FROM historico_gestion WHERE efecto IN(".substr($promesas, 0, -2).") AND gestor = '".$gestor['gestor']."' AND fecha_gestion BETWEEN '".$datos['fecha_inicial']." 00:00:00'
+                AND '".$datos['fecha_final']." 23:59:59'";
+            $array['promesas'] = $this->row($query);
+
+            $query ="SELECT COUNT(efecto) as posibles FROM historico_gestion WHERE efecto IN(".substr(strtoupper($posibles), 0, -2).") AND gestor = '".$gestor['gestor']."' AND fecha_gestion BETWEEN '".$datos['fecha_inicial']." 00:00:00'
+                AND '".$datos['fecha_final']." 23:59:59'";
+            $array['posibles'] = $this->row($query);
+
+            $query ="SELECT COUNT(contacto) as directos FROM historico_gestion WHERE contacto IN(".substr(strtoupper($contactos), 0, -2).") AND gestor = '".$gestor['gestor']."' AND fecha_gestion BETWEEN '".$datos['fecha_inicial']." 00:00:00'
+                AND '".$datos['fecha_final']." 23:59:59'";
+            $array['directos'] = $this->row($query);
+            $agente = $gestor['gestor'];
+
+            $resultado[$agente] = $array;
+        }
+
+        
+        $cabeceras = array('Agente', 'Clientes Gestionados', 'Número de Compromisos',
+                'Número de Posibles', 'Número de Directos', 'Número de Gestiones');
+
+        $fp = fopen('../../public/archivos/descargas/'.$datos['cartera'].'/informe_'.$datos['informe'].' '.date("Y-m-d").'.xls', 'w');
+        header('Content-Type: text/html; charset=UTF-8');
+        fputcsv($fp, $cabeceras);
+        $array = array();
+        
+        foreach ($resultado as $clave => $campos) {
+            $array['agente'] = $clave;
+            $gestionados = sizeof($campos['clientes']);
+            $array['gestionados'] = $gestionados;
+            $array['compromisos'] = $campos['promesas'][0]['promesas'];
+            $array['posibles'] = $campos['posibles'][0]['posibles'];
+            $array['directos'] = $campos['directos'][0]['directos'];
+            $array['gestiones'] = $campos['gestiones'][0]['gestiones'];
+            
+            fputcsv($fp, $array);
+        }
+
+        fclose($fp);
+        $retorno = (count($resultado) >= 1)? 'ok': 'fallo';             
+        return $retorno;
+
+    }
+
+    /**
+    * Función que obtiene y retorna los datos requeridos de acuerdo al tipo de informe   
+    * @param Type array: $tipo
+    * @return type string: $query: contiene la consulta solicitada de acuerdo al tipo de informe    
+    **/
+    private function consultasInformes($datos)
+    {
+        $resultado = array();
+        switch ($datos['informe']) {
+            case 'gestion':
+                $resultado['query'] = "SELECT * FROM historico_gestion 
+                WHERE fecha_gestion BETWEEN '".$datos['fecha_inicial']." 00:00:00'
+                AND '".$datos['fecha_final']." 23:59:59' AND cliente_id = '".$datos['cartera']."'";
+                
+                $resultado['cabeceras'] = array('Identificacion', 'Obligacion', 'Fecha Gestion',
+                'Hora Gestion', 'Accion', 'Efecto', 'Contacto', 'Motivo No Pago',  
+                'Actividad Economica', 'Fecha Promesa', 'Valor', 'Tipo Acuerdo',
+                'Telefono', 'Seguimiento', 'Observaciones', 'Gestor');
+                break;
+
+            case 'productividad':
+                $query = "";
+                break;                
+            default:
+                # code...
+                break;
+        }
+
+        return $resultado;
+    }
+
+
+     /**
+    * Función que obtiene información de homologados por cartera  
+    *
+    * @param Type array: $datos contiene la información requerida para parametrizar las consultas
+    * @return type array: $return:retorna todos los datos de las tipificaciones genericas y por cartera    
+    **/
+    private function administracionCartera($datos)
+    {
+        /***DEFAULT***/
+        $return = Array();
+        $query = "SELECT id, accion FROM accion WHERE estado = '1'";
+        $resultado = $this->row($query);
+        $return['accion'] = $resultado;
+
+        $query = "SELECT id, contacto FROM contacto WHERE estado = '1'";
+        $resultado = $this->row($query);
+        $return['contacto'] = $resultado;
+
+        $query = "SELECT id, efecto FROM efecto WHERE estado = '1'";
+        $resultado = $this->row($query);
+        $return['efecto'] = $resultado;
+
+        /***HOMOLOGADO CARTERA***/
+
+        $query = "SELECT id, id_accion, homologado FROM homologado_accion WHERE estado = '1' AND id_cliente = '".$datos['carteraActual']."'";
+        
+        $resultado = $this->row($query);
+        $return['homologado_accion'] = $resultado;
+
+        $query = "SELECT id, id_contacto, homologado FROM homologado_contacto WHERE estado = '1' AND id_cliente = '".$datos['carteraActual']."'";
+        $resultado = $this->row($query);
+        $return['homologado_contacto'] = $resultado;
+
+        $query = "SELECT id, id_efecto, homologado FROM homologado_efecto WHERE estado = '1' AND id_cliente = '".$datos['carteraActual']."'";
+        $resultado = $this->row($query);
+        $return['homologado_efecto'] = $resultado;
+
+
+        /*$query ="SELECT * FROM label_informacion";
+        resultado = $this->row($query);
+        $return['homologado_accion'] = $resultado;*/
+
+        return $return;
+    }
+
+    /**
+    * Función que obtiene información de homologados por cartera  
+    *
+    * @param Type array: $datos contiene la información requerida para parametrizar las consultas
+    * @return type array: $return:retorna todos los datos de las tipificaciones genericas y por cartera    
+    **/
+    private function estadoTarea($datos)
+    {
+        $resultado = array();
+        $query = "SELECT COUNT(identificacion) as gestionado, usuario FROM datos_tareas WHERE id_tarea = '".$datos['id']."' 
+                  AND gestionado = '1' GROUP BY usuario";
+
+        $gestionados_por_asesor = $this->row($query);
+        foreach ($gestionados_por_asesor as $gestionados) {
+                $resultado['gestionados_por_asesor']['labels'][] = $gestionados['usuario'];
+                $resultado['gestionados_por_asesor']['data'][] = $gestionados['gestionado'];
+                $rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
+                $color = '#'.$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)];
+                $resultado['gestionados_por_asesor']['colores'][] = $color;
+        }
+
+        $query = "SELECT COUNT(identificacion) as gestionado FROM datos_tareas WHERE id_tarea = '".$datos['id']."' 
+                  AND gestionado = '1'";
+        $gestionados = $this->row($query);
+        $resultado['gestionados'] = $gestionados[0]['gestionado'];
+
+
+        $query = "SELECT COUNT(identificacion) as no_gestionado FROM datos_tareas WHERE id_tarea = '".$datos['id']."' 
+                  AND gestionado = ''";
+        $no_gestionados = $this->row($query);
+        $resultado['no_gestionados'] = $no_gestionados[0]['no_gestionado'];
+
+        $query = "SELECT COUNT(identificacion) as cantidad, TIMESTAMPDIFF(MINUTE , dt.inicio_gestion, dt.fin_gestion ) AS diferencia 
+                  FROM datos_tareas dt 
+                  WHERE dt.id_tarea = '".$datos['id']."' AND dt.fin_gestion != ''";
+                  
+        $diferencias = $this->row($query);
+        $suma = 0;
+        foreach ($diferencias as $diferencia) {
+                $suma = $suma + $diferencia['diferencia'];
+        }
+
+        $resultado['promedio_gestion'] = $suma/$diferencias[0]['cantidad'];
+         
+        return $resultado;
+
+    }
+
+     
+
+}

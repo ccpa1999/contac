@@ -1,0 +1,1 @@
+SELECT usuario FROM pausas WHERE cartera = '2' AND fecha_pausa BETWEEN '2018/02/01' AND '2018/02/01' GROUP BY usuario
