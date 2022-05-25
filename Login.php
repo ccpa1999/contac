@@ -11,20 +11,31 @@
  * @copyright (c) 2016, Fianza LTDA
  * */
 session_start();
+
 require_once './config/conect.php';
+
 $login = new Login($_POST);
+
 class Login {
     var $conexion;
+    
     public function __construct($datos)
     {
         $this->usuario = $datos['usuario'];
         $this->password = $datos['password'];
+
         $this->conexion = new conexion();
+
         $resultado = $this->logueoUsuario();
-        if ($resultado == 'existe') {
+
+        if ($resultado == 'existe') 
+        {
             $controlador = $this->obtenerControlador($_SESSION['acceso']);
+
             header("location: app/controllers/$controlador");
-        } else {
+        } 
+        else 
+        {
             ?>
             <script>
                 alert("ERROR EN INICIO DE SESION \nUSUARIO O CLAVE INCORRECTA");
@@ -44,12 +55,16 @@ class Login {
     {
         $resultado = "no existe";
         $usuario = $this->obtenerUsuario();
+
         if (isset($usuario[0]['id_usuario'])) {
             $acceso = $this->obtenerAcceso($usuario[0]['id_usuario']);
+
             $this->asignarSesion($usuario, $acceso['roles']);
             $this->registrarIngreso($usuario);
+
             $resultado = "existe";
         }
+
         return $resultado;
     }
     /**
@@ -65,6 +80,7 @@ class Login {
         $query = "SELECT * FROM usuarios WHERE usuario = '" . $this->usuario . "' "
                 . "AND password = MD5('" . $this->password . "')";
         $resultado = $this->conexion->row($query);
+
         return $resultado;
     }
     /**
@@ -77,6 +93,7 @@ class Login {
     private function registrarIngreso($datos)
     {
         $ip = $this->obtenerIP();
+
         $query = "INSERT INTO control_acceso (usuario, tipo_ingreso, ip_ingreso, fecha_ingreso) VALUES"
                 . "('" . $datos[0]['usuario'] . "', 'inicio_sesion', '$ip', NOW())";
         $this->conexion->ejecutar($query);
@@ -92,13 +109,18 @@ class Login {
     private function asignarSesion($datos, $acceso)
     {
         date_default_timezone_set('America/Bogota');
+
         $date = new DateTime();
         $año = $date->format('Y');
+        
         $password = 'Fianza' . $año . '*';
+        
         $_SESSION['cambio_password'] = ($this->password == $password) ? 1 : 0;
+        
         $fechaActual = date("m-d");
         $cumpleanios = explode("-", $datos[0]['fecha_nacimiento']);
         $activarCumpleanios = ($cumpleanios[1] .'-'. $cumpleanios[2] == $fechaActual) ? 1 : 0;
+        
         $_SESSION['id_usuario'] = $datos[0]['id_usuario'];
         $_SESSION['usuario'] = $datos[0]['usuario'];
         $_SESSION['nombre'] = $datos[0]['nombre_completo'];
@@ -124,6 +146,7 @@ class Login {
             return $_SERVER['HTTP_CLIENT_IP'];
         if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
             return $_SERVER['HTTP_X_FORWARDED_FOR'];
+
         return $_SERVER['REMOTE_ADDR'];
     }
     /**
@@ -136,18 +159,22 @@ class Login {
     private function obtenerAcceso($id_usuario)
     {
         $resultado = Array();
+
         $query = "SELECT ru.*, r.rol as nombre_rol, c.nombre_cliente "
-                . "FROM roles_usuarios ru, roles r, clientes c, usuarios u "
-                . "WHERE ru.id_rol = r.id_rol "
-                . "AND ru.id_cliente = c.id_cliente "
-                . "AND ru.id_usuario = u.id_usuario "
-                . "AND ru.id_rol != '0' "
-                . "AND u.id_usuario = '" . $id_usuario ."'"
-                . "ORDER BY c.id_cliente ASC";
-                $datos = $this->conexion->row($query);
+                ."FROM roles_usuarios ru, roles r, clientes c, usuarios u "
+                ."WHERE ru.id_rol = r.id_rol "
+                ."AND ru.id_cliente = c.id_cliente "
+                ."AND ru.id_usuario = u.id_usuario "
+                ."AND ru.id_rol != '0' "
+                ."AND u.id_usuario = '" . $id_usuario ."'"
+                ."ORDER BY c.id_cliente ASC";
+        $datos = $this->conexion->row($query);
+
         $resultado['cantidad'] = count($datos);
+
         $resultado['roles'] = $datos;
         $_SESSION['acceso'] = $datos;
+
         return $resultado;
     }
     /**
@@ -160,13 +187,18 @@ class Login {
      */
     private function obtenerControlador($acceso)
     {
-        if (count($acceso) <= 1) {
-            $query = "SELECT controlador, id_cliente FROM clientes WHERE id_cliente = '" . $acceso['roles'][0]['id_cliente'] . "'";
+        if (count($acceso) <= 1) 
+        {
+            $query = "SELECT controlador, id_cliente FROM clientes WHERE id_cliente = '" . $acceso[0]['id_cliente'] . "'";
             $resultado = $this->conexion->row($query);
+            
             $controller = $resultado[0]['controlador'] . '?&cartera=' . $resultado[0]['id_cliente'];
-        } else {
+        }
+        else
+        {
             $controller = 'administracionController.php';
         }
+
         return $controller;
     }
 }

@@ -251,7 +251,7 @@ function formularioEditarDemografico() {
             $("#estadoDemo option[value = '" + datos.estado + "']").attr("selected", true);
             
             $('#accionGuardarEditar').on('click', editarDemografico);
-            
+
             $('#hora').datetimepicker({
                 datepicker: false,
                 format: 'H:i'
@@ -259,7 +259,7 @@ function formularioEditarDemografico() {
 
             $('.telefonoGestion').on('dblclick.dt', function () {
                 visualizarTelefonos($(this));
-            });            
+            });
         }
     })
 }
@@ -385,10 +385,6 @@ function crearNuevoDemografico(formulario) {
     /*}*/
 }
 
-$('.telefonoGestion').on('dblclick.dt', function () {
-    visualizarTelefonos($(this));
-});
-
 function visualizarTelefonos(telefonoSeleccionado)
 {
     let telefono = $(telefonoSeleccionado).data('telefono');
@@ -411,7 +407,8 @@ function crearNuevoCliente() {
     var metodo = $(this).data('metodo');
     var formData = new FormData(document.getElementById('#formularioCreacion'));
     
-    if ($(this).parsley().validate() == true) {
+    if ($(this).parsley().validate() == true) 
+    {
         $.ajax({
             url: "../../app/controllers/administracionController.php",
             type: 'POST',
@@ -423,10 +420,15 @@ function crearNuevoCliente() {
             },
             success: function (resultado) {
                 $('#divCargando').fadeOut();
-                if (resultado == 'ok') {
+
+                if (resultado == 'ok') 
+                {
                     $('#alertSuccess').fadeIn().delay(2000).fadeOut();
+
                     cargarDatos(controlador, metodo);
-                } else {
+                }
+                else 
+                {
                     $('#alertWarning').fadeIn().delay(2000).fadeOut();
                 }
             }
@@ -3735,6 +3737,13 @@ $(document).ready(function () {
 
     //    setTimeout('consultarNotificaciones()', 10000);
 });
+
+$('.formularioEditarDemografico').on('click', formularioEditarDemografico);
+
+$('.telefonoGestion').on('dblclick.dt', function () {
+    visualizarTelefonos($(this));
+});
+
 
 /************** Search ****************/
 $(function () {

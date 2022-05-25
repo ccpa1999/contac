@@ -55,13 +55,9 @@ class carterasController {
     {
         $data = $this->claseCarteras->controlador($datos);
 
-        // $rol_actual = 0;
-
         foreach ($_SESSION['acceso'] as $acceso) {
             if ($acceso['id_cliente'] == $data['cartera'][0]['id_cliente']) 
             {
-                // $rol_actual = $acceso['id_rol'];
-
                 $_SESSION['rol_actual'] = $acceso['id_rol'];
 		        $_SESSION['carteraActual'] = $datos['cartera'];
 
