@@ -1,0 +1,37 @@
+0000000000000000000000000000000000000000 84fd37ad42050c8aca1ea4448ced8bd631761a06 Cristian <desarrollo@fianza.com.co> 1666802386 -0500	branch: Created from origin/rama_cristian
+84fd37ad42050c8aca1ea4448ced8bd631761a06 03f5345bb99634cb845f60ded44bdcf347284beb Cristian <desarrollo@fianza.com.co> 1666802716 -0500	commit: Correccion de hora de gestion
+03f5345bb99634cb845f60ded44bdcf347284beb 319c399bff2a17d4126ddb796913a022d7f2898b Cristian <desarrollo@fianza.com.co> 1666821082 -0500	pull --ff --recurse-submodules --progress origin: Fast-forward
+319c399bff2a17d4126ddb796913a022d7f2898b a2a1fe0bb5b1013726364359e6d9cd5267dab9a4 Cristian <desarrollo@fianza.com.co> 1666901426 -0500	commit: Formularios de solicitudes de envio y correccion de eliminacion de sesion
+a2a1fe0bb5b1013726364359e6d9cd5267dab9a4 7abf5b13d5ba9d25e2e92c044d5d0cf2f8d7ff3d Cristian <desarrollo@fianza.com.co> 1666903300 -0500	pull --ff --recurse-submodules --progress origin: Fast-forward
+7abf5b13d5ba9d25e2e92c044d5d0cf2f8d7ff3d deba1133850b1f60626ecbb917d18486d78fc489 Cristian <desarrollo@fianza.com.co> 1669218180 -0500	pull --ff --recurse-submodules --progress origin: Fast-forward
+deba1133850b1f60626ecbb917d18486d78fc489 e9aeb200e8c96cc3a6a045baa0910e1224928ae8 Cristian <desarrollo@fianza.com.co> 1669387432 -0500	commit: Panel de cargue de demograficos con seleccion por tipo
+e9aeb200e8c96cc3a6a045baa0910e1224928ae8 930bd998fc756faf1d02641d34024b44c5f514bc Cristian <desarrollo@fianza.com.co> 1669399012 -0500	pull --ff --recurse-submodules --progress origin: Fast-forward
+930bd998fc756faf1d02641d34024b44c5f514bc 8db6971537abbc63f3692a01f882d4e383d1f807 Cristian <desarrollo@fianza.com.co> 1669647909 -0500	commit: Formularios de solicitudes, informes mejorados y adaptados con los homologados, adaptacion de historico con homologados
+8db6971537abbc63f3692a01f882d4e383d1f807 b27b5564a9ed5a531e241a4d7f4d2473b2a0fea9 Cristian <desarrollo@fianza.com.co> 1669729780 -0500	commit: Personalizacion de panel de información, aumento de loength de datatables y dinamismo en panel de información en módulo de gestión
+b27b5564a9ed5a531e241a4d7f4d2473b2a0fea9 46c7afc8906e032236fc1dc5e3acf0a692ec6d9b Cristian <desarrollo@fianza.com.co> 1669754680 -0500	commit: Corrección metodo busqueda por obligacion
+46c7afc8906e032236fc1dc5e3acf0a692ec6d9b 3de31b7551d1d7d9315cd71ba2b9fe1c5d87cecb Cristian <desarrollo@fianza.com.co> 1670006161 -0500	commit: Correccion asignacion de cartera Scripts
+3de31b7551d1d7d9315cd71ba2b9fe1c5d87cecb d87efc24b8f1908454e7454dbb0532ba72bd6077 Cristian <desarrollo@fianza.com.co> 1670018347 -0500	commit: Correccion cc undefined en consulta de deudor y ordenamiento de inputs_gestion por posicion
+d87efc24b8f1908454e7454dbb0532ba72bd6077 378917e932370b4fe69e2cc27cc5e0995e7bafaa Cristian <desarrollo@fianza.com.co> 1670357496 -0500	pull --ff --recurse-submodules --progress origin: Fast-forward
+378917e932370b4fe69e2cc27cc5e0995e7bafaa b9deb2deb4aa8a47959ecf1dc5c898ac6f3468f7 Cristian <desarrollo@fianza.com.co> 1670437961 -0500	commit: Configuracion y dinamismo de tabla de historico de gestion
+b9deb2deb4aa8a47959ecf1dc5c898ac6f3468f7 ab04a8ebba642b88eede0690ce9b523dfde6ea4d Cristian <desarrollo@fianza.com.co> 1670603493 -0500	commit: agendamiento global, notificaciones y echo por =
+ab04a8ebba642b88eede0690ce9b523dfde6ea4d d11805a4ab757085f37fdab952049907e900fd2d Cristian <desarrollo@fianza.com.co> 1670611007 -0500	commit: Reprogramacion en almacenamiento de gestion
+d11805a4ab757085f37fdab952049907e900fd2d 193a8bfed2a9a6d15d4d4f99a33ce832748ee50e Cristian <desarrollo@fianza.com.co> 1670621676 -0500	commit: Correccion de agendamiento
+193a8bfed2a9a6d15d4d4f99a33ce832748ee50e fcbbd6949a0e1003523b0ee2b2e43695c1bda7b9 Cristian <desarrollo@fianza.com.co> 1670856208 -0500	commit: Obtencion de id de la gestion para almacenamiento en reprogramacion
+fcbbd6949a0e1003523b0ee2b2e43695c1bda7b9 efc31ba144c399adb51a16e88204ed70644720d2 Cristian <desarrollo@fianza.com.co> 1671049564 -0500	commit: validador y creador de rutas de cargue y descargue
+efc31ba144c399adb51a16e88204ed70644720d2 4c26f728ea94b25c9b923320ba618236ad53c6bc Cristian <desarrollo@fianza.com.co> 1671053106 -0500	pull --ff --recurse-submodules --progress origin: Fast-forward
+4c26f728ea94b25c9b923320ba618236ad53c6bc 02c1e25c5a76a3516a8f277d91dd25d7ec0c3563 Cristian <desarrollo@fianza.com.co> 1672245200 -0500	pull --ff --recurse-submodules --progress origin: Fast-forward
+02c1e25c5a76a3516a8f277d91dd25d7ec0c3563 9a77e9ab03bbf99f9c9b0162883333840ba53aa2 Cristian <desarrollo@fianza.com.co> 1672334654 -0500	commit: Modificacion de refresco de historico
+9a77e9ab03bbf99f9c9b0162883333840ba53aa2 7670aaea03f799f5fb43cdea476f43b61b2e97c8 Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1672769948 -0500	commit: link a chat_contac
+7670aaea03f799f5fb43cdea476f43b61b2e97c8 a114f2f95fd479f5ffbc2116085bc1e097027510 Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1673542740 -0500	pull --ff --recurse-submodules --progress origin: Fast-forward
+a114f2f95fd479f5ffbc2116085bc1e097027510 0558c95258d01a764767aa0a5abfe8a2c5269d06 Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1673544883 -0500	commit: rollback de homologados por id
+0558c95258d01a764767aa0a5abfe8a2c5269d06 723d27630481723aa046d422a15d2f87601f08b2 Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1674227658 -0500	commit: Graficas de scoring
+723d27630481723aa046d422a15d2f87601f08b2 c80a152586fe44080dca2693a73ec40244b41c79 Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1674227701 -0500	commit: modulo de scoring
+c80a152586fe44080dca2693a73ec40244b41c79 31c26fb963138d8f6518615346174a36f31bf32e Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1674227804 -0500	commit (merge): Merge branch 'rama_cristian' of https://github.com/desarrolloFianza/contac_mejora into rama_cristian
+31c26fb963138d8f6518615346174a36f31bf32e 350cd12d6b67683d77373c0539da6e4a89aa722d Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1674228052 -0500	commit: botones nuevos
+350cd12d6b67683d77373c0539da6e4a89aa722d 27823807d616ce88db53a1d3c7e3bcb83e7f4532 Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1674497041 -0500	commit: mejora de panel de scoring
+27823807d616ce88db53a1d3c7e3bcb83e7f4532 377273826e6c7ae6973b230575815e5bdaf6cf67 Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1674497186 -0500	pull --ff --recurse-submodules --progress origin: Merge made by the 'ort' strategy.
+377273826e6c7ae6973b230575815e5bdaf6cf67 80124f116d31decaf3ed45f78ab114659673d5f8 Cristian <38796082+ccpa1999@users.noreply.github.com> 1674829367 -0500	commit: Modulo Ranking y Modulo Scoring
+80124f116d31decaf3ed45f78ab114659673d5f8 e633825b52f9858c5820e936dd23c6c94ff82dbc Cristian <38796082+ccpa1999@users.noreply.github.com> 1674836269 -0500	commit: Mejora de panel de tareas
+e633825b52f9858c5820e936dd23c6c94ff82dbc 233454e2b04b03880a2bd299a742d12744d10300 Cristian <38796082+ccpa1999@users.noreply.github.com> 1674837570 -0500	pull --ff --recurse-submodules --progress origin: Fast-forward
+233454e2b04b03880a2bd299a742d12744d10300 33826ff5d2f1fc526604344918cccae2faccc737 Cristian <38796082+ccpa1999@users.noreply.github.com> 1675357107 -0500	commit: mejora en metodo de ranking
+33826ff5d2f1fc526604344918cccae2faccc737 6560366e554b8d7f95f612f8083234815a4c2a80 Cristian <38796082+ccpa1999@users.noreply.github.com> 1678378946 -0500	commit: Conexion con backendfianza y correccción de corss

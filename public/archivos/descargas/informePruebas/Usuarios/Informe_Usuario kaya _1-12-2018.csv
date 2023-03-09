@@ -1,0 +1,23 @@
+Tipo_Prueba;"Fecha AsignaciÃ³n";"Cantidad de intentos";"Porcentaje aprobaciÃ³n";intento;"Fecha Realizada";"Tiempo Prueba";"Resultado prueba";DescripciÃ³n;Pregunta;"Respuesta usuario";"Resultado pregunta";"Respuesta correcta";"tiempo en la pregunta";"Cantidad de movimientos en la respuesta"
+Prueba;2018-12-05;3;90;;;;;;;;;;;
+;;;;1;2018-10-24;00:10:00;Reprobo;"El usuario tiene un aparato tecnÃ³logic";;;;;;
+;;;;;;;;;"¿Las contraseñas deben tener cuántos caracteres?";"Catorce (14)";acierto;"Catorce (14)";" 3 sec";1
+;;;;;;;;;"¿Qué dispositivo y/o aplicativo no debe estar habilitado en los equipos de los analistas?";USB;acierto;USB;" 12 sec";1
+;;;;;;;;;"La creación de Usuario esta a cargo de?
+";"Ingeniero área TI
+";acierto;"Ingeniero área TI
+";" 7 sec";1
+;;;;2;2018-10-24;00:10:00;Aprobo;;;;;;;
+;;;;;;;;;"¿Las contraseñas deben tener cuántos caracteres?";"Catorce (14)";acierto;"Catorce (14)";" 8 sec";1
+;;;;;;;;;"¿Qué dispositivo y/o aplicativo no debe estar habilitado en los equipos de los analistas?";USB;acierto;USB;" 6 sec";1
+;;;;;;;;;"La creación de Usuario esta a cargo de?
+";"Ingeniero área TI
+";acierto;"Ingeniero área TI
+";" 2 sec";1
+;;;;3;2018-12-05;00:10:00;Aprobo;;;;;;;
+;;;;;;;;;"¿Las contraseñas deben tener cuántos caracteres?";"Catorce (14)";acierto;"Catorce (14)";" 5 sec";1
+;;;;;;;;;"¿Qué dispositivo y/o aplicativo no debe estar habilitado en los equipos de los analistas?";USB;acierto;USB;" 1:51 min";1
+;;;;;;;;;"La creación de Usuario esta a cargo de?
+";"Ingeniero área TI
+";acierto;"Ingeniero área TI
+";" 1:54 min";1

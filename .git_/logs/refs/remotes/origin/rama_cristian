@@ -1,0 +1,38 @@
+0000000000000000000000000000000000000000 b00afbf8cac1d8ff8dfc7bfdd1b7ed687276808e Cristian <desarrollo@fianza.com.co> 1666795141 -0500	fetch --progress --prune --recurse-submodules=on-demand origin: storing head
+b00afbf8cac1d8ff8dfc7bfdd1b7ed687276808e 84fd37ad42050c8aca1ea4448ced8bd631761a06 Cristian <desarrollo@fianza.com.co> 1666801511 -0500	fetch --progress --prune --recurse-submodules=on-demand origin: fast-forward
+84fd37ad42050c8aca1ea4448ced8bd631761a06 03f5345bb99634cb845f60ded44bdcf347284beb Cristian <desarrollo@fianza.com.co> 1666802735 -0500	update by push
+03f5345bb99634cb845f60ded44bdcf347284beb 319c399bff2a17d4126ddb796913a022d7f2898b Cristian <desarrollo@fianza.com.co> 1666821070 -0500	fetch --progress --prune --recurse-submodules=on-demand origin: fast-forward
+319c399bff2a17d4126ddb796913a022d7f2898b a2a1fe0bb5b1013726364359e6d9cd5267dab9a4 Cristian <desarrollo@fianza.com.co> 1666901501 -0500	update by push
+a2a1fe0bb5b1013726364359e6d9cd5267dab9a4 7abf5b13d5ba9d25e2e92c044d5d0cf2f8d7ff3d Cristian <desarrollo@fianza.com.co> 1666903296 -0500	fetch --progress --prune --recurse-submodules=on-demand origin: fast-forward
+7abf5b13d5ba9d25e2e92c044d5d0cf2f8d7ff3d deba1133850b1f60626ecbb917d18486d78fc489 Cristian <desarrollo@fianza.com.co> 1669218175 -0500	fetch --progress --prune --recurse-submodules=on-demand origin: fast-forward
+deba1133850b1f60626ecbb917d18486d78fc489 e9aeb200e8c96cc3a6a045baa0910e1224928ae8 Cristian <desarrollo@fianza.com.co> 1669387439 -0500	update by push
+e9aeb200e8c96cc3a6a045baa0910e1224928ae8 930bd998fc756faf1d02641d34024b44c5f514bc Cristian <desarrollo@fianza.com.co> 1669398989 -0500	fetch --progress --prune --recurse-submodules=on-demand origin: fast-forward
+930bd998fc756faf1d02641d34024b44c5f514bc 8db6971537abbc63f3692a01f882d4e383d1f807 Cristian <desarrollo@fianza.com.co> 1669648006 -0500	update by push
+8db6971537abbc63f3692a01f882d4e383d1f807 b27b5564a9ed5a531e241a4d7f4d2473b2a0fea9 Cristian <desarrollo@fianza.com.co> 1669730587 -0500	update by push
+b27b5564a9ed5a531e241a4d7f4d2473b2a0fea9 46c7afc8906e032236fc1dc5e3acf0a692ec6d9b Cristian <desarrollo@fianza.com.co> 1669754741 -0500	update by push
+46c7afc8906e032236fc1dc5e3acf0a692ec6d9b 3de31b7551d1d7d9315cd71ba2b9fe1c5d87cecb Cristian <desarrollo@fianza.com.co> 1670006178 -0500	update by push
+3de31b7551d1d7d9315cd71ba2b9fe1c5d87cecb d87efc24b8f1908454e7454dbb0532ba72bd6077 Cristian <desarrollo@fianza.com.co> 1670018362 -0500	update by push
+d87efc24b8f1908454e7454dbb0532ba72bd6077 88eeb7729a4940a4e5c0d6a8da5c26598028dcd0 Cristian <desarrollo@fianza.com.co> 1670357406 -0500	fetch --progress --prune --recurse-submodules=on-demand origin: fast-forward
+88eeb7729a4940a4e5c0d6a8da5c26598028dcd0 378917e932370b4fe69e2cc27cc5e0995e7bafaa Cristian <desarrollo@fianza.com.co> 1670357496 -0500	pull --ff --recurse-submodules --progress origin: fast-forward
+378917e932370b4fe69e2cc27cc5e0995e7bafaa b9deb2deb4aa8a47959ecf1dc5c898ac6f3468f7 Cristian <desarrollo@fianza.com.co> 1670438021 -0500	update by push
+b9deb2deb4aa8a47959ecf1dc5c898ac6f3468f7 ab04a8ebba642b88eede0690ce9b523dfde6ea4d Cristian <desarrollo@fianza.com.co> 1670604509 -0500	update by push
+ab04a8ebba642b88eede0690ce9b523dfde6ea4d d11805a4ab757085f37fdab952049907e900fd2d Cristian <desarrollo@fianza.com.co> 1670611038 -0500	update by push
+d11805a4ab757085f37fdab952049907e900fd2d 193a8bfed2a9a6d15d4d4f99a33ce832748ee50e Cristian <desarrollo@fianza.com.co> 1670621696 -0500	update by push
+193a8bfed2a9a6d15d4d4f99a33ce832748ee50e fcbbd6949a0e1003523b0ee2b2e43695c1bda7b9 Cristian <desarrollo@fianza.com.co> 1670856221 -0500	update by push
+fcbbd6949a0e1003523b0ee2b2e43695c1bda7b9 efc31ba144c399adb51a16e88204ed70644720d2 Cristian <desarrollo@fianza.com.co> 1671049582 -0500	update by push
+efc31ba144c399adb51a16e88204ed70644720d2 4c26f728ea94b25c9b923320ba618236ad53c6bc Cristian <desarrollo@fianza.com.co> 1671053102 -0500	fetch --progress --prune --recurse-submodules=on-demand origin: fast-forward
+4c26f728ea94b25c9b923320ba618236ad53c6bc 95e798205cae95e8f47c553ea5461fc7f99768bb Cristian <desarrollo@fianza.com.co> 1671545240 -0500	fetch --progress --prune --recurse-submodules=on-demand origin: fast-forward
+95e798205cae95e8f47c553ea5461fc7f99768bb 02c1e25c5a76a3516a8f277d91dd25d7ec0c3563 Cristian <desarrollo@fianza.com.co> 1672245200 -0500	pull --ff --recurse-submodules --progress origin: fast-forward
+02c1e25c5a76a3516a8f277d91dd25d7ec0c3563 9a77e9ab03bbf99f9c9b0162883333840ba53aa2 Cristian <desarrollo@fianza.com.co> 1672334666 -0500	update by push
+9a77e9ab03bbf99f9c9b0162883333840ba53aa2 7670aaea03f799f5fb43cdea476f43b61b2e97c8 Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1672769950 -0500	update by push
+7670aaea03f799f5fb43cdea476f43b61b2e97c8 a114f2f95fd479f5ffbc2116085bc1e097027510 Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1673542384 -0500	fetch --progress --prune --recurse-submodules=on-demand origin: fast-forward
+a114f2f95fd479f5ffbc2116085bc1e097027510 0558c95258d01a764767aa0a5abfe8a2c5269d06 Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1673544892 -0500	update by push
+0558c95258d01a764767aa0a5abfe8a2c5269d06 35298e3ae732dab054aaab4f7d00f3342ae5712f Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1673902449 -0500	fetch --progress --prune --recurse-submodules=on-demand origin: fast-forward
+35298e3ae732dab054aaab4f7d00f3342ae5712f 31c26fb963138d8f6518615346174a36f31bf32e Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1674228015 -0500	update by push
+31c26fb963138d8f6518615346174a36f31bf32e 350cd12d6b67683d77373c0539da6e4a89aa722d Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1674228057 -0500	update by push
+350cd12d6b67683d77373c0539da6e4a89aa722d a353cf3790b059270598427e9062ff7c4a20b0c1 Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1674232189 -0500	fetch --progress --prune --recurse-submodules=on-demand origin: fast-forward
+a353cf3790b059270598427e9062ff7c4a20b0c1 377273826e6c7ae6973b230575815e5bdaf6cf67 Cristian <60681909+desarrolloFianza@users.noreply.github.com> 1674497307 -0500	update by push
+377273826e6c7ae6973b230575815e5bdaf6cf67 e633825b52f9858c5820e936dd23c6c94ff82dbc Cristian <38796082+ccpa1999@users.noreply.github.com> 1674836278 -0500	update by push
+e633825b52f9858c5820e936dd23c6c94ff82dbc 233454e2b04b03880a2bd299a742d12744d10300 Cristian <38796082+ccpa1999@users.noreply.github.com> 1674837563 -0500	fetch --progress --prune --recurse-submodules=on-demand origin: fast-forward
+233454e2b04b03880a2bd299a742d12744d10300 33826ff5d2f1fc526604344918cccae2faccc737 Cristian <38796082+ccpa1999@users.noreply.github.com> 1675375185 -0500	update by push
+33826ff5d2f1fc526604344918cccae2faccc737 6560366e554b8d7f95f612f8083234815a4c2a80 Cristian <38796082+ccpa1999@users.noreply.github.com> 1678378949 -0500	update by push

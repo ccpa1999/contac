@@ -1,0 +1,8 @@
+USUARIO;PREGUNTA;RESPUESTA;TIEMPO
+Wnieto;"La creacion de Usuario esta a cargo de?";"Ingeniero area TI";0:0:33
+Wnieto;"Tamaño contraseña?";"14 Caracteres";0:0:33
+Wnieto;"Los analistas tienen acceso a:";"Carpeta de la campaña";0:0:33
+Wnieto;"El uso de celulares esta permitido!";FALSO;0:0:33
+Wnieto;"A que rol no se permite el uso de Celulares?
+";"Analistas
+";0:0:33

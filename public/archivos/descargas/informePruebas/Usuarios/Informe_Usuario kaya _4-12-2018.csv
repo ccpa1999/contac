@@ -1,0 +1,9 @@
+"Tipo Prueba";"Fecha Asignacion";"Cantidad de intentos";"Porcentaje aprobacion";intento;"Fecha Realizada";"Tiempo Prueba";"Resultado prueba";Descripcion;Pregunta;"Respuesta usuario";"Resultado pregunta";"Respuesta correcta";"tiempo en la pregunta";"Cantidad de movimientos en la respuesta"
+Prueba;2018-12-13;1;90;;;;;;;;;;;
+;;;;1;2018-12-13;00:10:00;Reprobo;;;;;;;
+;;;;;;;;;"¿Las contraseñas deben tener cuántos caracteres?";"Catorce (14)";acierto;"Catorce (14)";" 2 sec";1
+;;;;;;;;;"¿Qué dispositivo y/o aplicativo no debe estar habilitado en los equipos de los analistas?";Internet;desacierto;USB;" 15 sec";2
+;;;;;;;;;"La creación de Usuario esta a cargo de?
+";"Ingeniero área TI
+";acierto;"Ingeniero área TI
+";" 5 sec";1
